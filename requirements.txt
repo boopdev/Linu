@@ -1,0 +1,12 @@
+git+https://github.com/Rapptz/discord.py@rewrite
+lxml
+mtranslate
+colorthief
+pyparsing
+sympy
+psutil
+emoji
+wikipedia
+urban-async
+safygiphy
+logging
