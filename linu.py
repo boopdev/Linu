@@ -52,7 +52,7 @@ class LinuClient(AutoShardedBot):
         self.add_command(self.res)
         self.session = aiohttp.ClientSession(loop=self.loop)
         self.check = default.get("data/blacklist.json")
-        self.counter = Counter()
+        self.counter = Counter() # TO UPDATE COUNTERS linu evl bot.counter.update({'messages_read': 8000, 'commands_ran': 80})
 
     def load_extensions(self, cogs=None, path='cogs.'):
         '''Loads the default set of extensions or a seperate one if given'''
@@ -70,7 +70,7 @@ class LinuClient(AutoShardedBot):
     handler = logging.FileHandler(
         filename='data/logs/' + datetime.datetime.now().strftime("%Y-%m-%d") + '.log', encoding='utf-8', mode='w')
     handler.setFormatter(logging.Formatter(
-        '[%(asctime)s][%(levelname)s][%(name)s] [[%(message)s]]'))
+        '%(asctime)s  %(levelname)s %(name)s\n%(message)s\n\n'))
     logger.addHandler(handler)
 
 
@@ -146,10 +146,10 @@ class LinuClient(AutoShardedBot):
         
 
     async def process_commands(self, message):
-        '''Utilises the CustomContext subclass of discord.Context'''
+        '''p r o c e s s   t h o s e     c o m m a n d s'''
         blcheck = default.get("data/blacklist.json").blacklisted
         if message.author.id in blcheck:
-            return
+            return # oof get fucked
         linu = await self.get_context(message, cls=CustomContext)
         if linu.command is None:
             return

@@ -177,13 +177,34 @@ class Moderator:
         except Exception as e:
             await linu.send(e)
 
+    @commands.group(invoke_without_command=True)
+    @commands.guild_only()
+    @permissions.has_permissions(manage_roles=True)
+    async def role(self, linu):
+        """Roles commands"""
+        if linu.invoked_subcommand is None:
+            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["role"].commands])
+
+            embed = discord.Embed(
+                title="Whoops, seems like you didnt use a sub command",
+                description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
+                color=0xFFA500
+            )
+            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            await linu.send(embed=embed)
 
 
-    @commands.command()
+    @role.command()
     @commands.guild_only()
     @permissions.has_permissions(manage_roles=True)
     async def addrole(self, linu, member: discord.Member, *, rolename: str):
         '''Add a role to someone else.'''
+        if member is None:
+            linu.send("Mention someone please")
+
+        if rolename is None:
+            linu.send("Give a role please")
+
         role = discord.utils.find(lambda m: rolename.lower() in m.name.lower(), linu.message.guild.roles)
         if not role:
             return await linu.send('That role does not exist.')
@@ -194,7 +215,7 @@ class Moderator:
             await linu.send("I don't have the perms to add that role.")
 
 
-    @commands.command()
+    @role.command()
     @commands.guild_only()
     @permissions.has_permissions(manage_roles=True)
     async def removerole(self, linu, member: discord.Member, *, rolename: str):
@@ -206,7 +227,7 @@ class Moderator:
             await member.remove_roles(role)
             await linu.send(f'Removed: `{role.name}`')
         except:
-            await linu.send("I don't have the perms to add that role.")
+            await linu.send("I don't have the perms to remove that role.")
 
 
     @commands.group(invoke_without_command=True)

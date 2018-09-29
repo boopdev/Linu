@@ -152,28 +152,18 @@ class Utility:
         await ctx.send(embed=em)
 
 
-    @commands.command()
-    async def embed(self, ctx, *, params):
-        '''Send complex rich embeds with this command!
-
-        ```
-        {description: Discord format supported}
-        {title: required | url: optional}
-        {author: required | icon: optional | url: optional}
-        {image: image_url_here}
-        {thumbnail: image_url_here}
-        {field: required | value: required}
-        {footer: footer_text_here | icon: optional}
-        {timestamp} <-this will include a timestamp
-        ```
-        '''
-        em = await self.to_embed(ctx, params)
-        await ctx.message.delete()
+    @commands.command(pass_context=True)
+    @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
+    async def embed(self, linu, *, edescription: str):
+        """makes you a embed"""
+        embed = discord.Embed(description=edescription, color=0x36393e)
+        embed.set_footer(text='Requested by:\n{0}'.format(linu.author))
         try:
-            await ctx.send(embed=em)
-            self._last_embed = params
-        except:
-            await ctx.send('Improperly formatted embed!')
+            await linu.message.delete()
+            await linu.send(embed=embed) 
+        except Exception:
+            await linu.send(embed=embed)
+
 
     @commands.group(aliases=['rtfd'], invoke_without_command=True)
     async def rtfm(self, ctx, *, obj: str = None):
