@@ -43,18 +43,18 @@ class Information:
 
     @commands.command(aliases=['server','si','svi'], no_pm=True)
     @commands.guild_only()
-    async def serverinfo(self, ctx, server_id : int=None):
+    async def serverinfo(self, linu, server_id : int=None):
         '''See information about the server.'''
-        server = self.bot.get_guild(id=server_id) or ctx.guild
+        server = self.bot.get_guild(id=server_id) or linu.guild
         total_users = len(server.members)
         online = len([m for m in server.members if m.status != discord.Status.offline])
         text_channels = len([x for x in server.channels if isinstance(x, discord.TextChannel)])
         voice_channels = len([x for x in server.channels if isinstance(x, discord.VoiceChannel)])
         categories = len(server.channels) - text_channels - voice_channels
-        passed = (ctx.message.created_at - server.created_at).days
+        passed = (linu.message.created_at - server.created_at).days
         created_at = "Since {}. That's over {} days ago!".format(server.created_at.strftime("%d %b %Y %H:%M"), passed)
 
-        colour = await ctx.get_dominant_color(server.icon_url)
+        colour = await linu.get_dominant_color(server.icon_url)
 
         data = discord.Embed(description=created_at,colour=colour)
         data.add_field(name="Region", value=str(server.region))
@@ -68,11 +68,11 @@ class Information:
         data.set_author(name=server.name, icon_url=None or server.icon_url)
         data.set_thumbnail(url=None or server.icon_url)
         try:
-            await ctx.send(embed=data)
+            await linu.send(embed=data)
         except discord.HTTPException:
             em_list = await embedtobox.etb(data)
             for page in em_list:
-                await ctx.send(page)
+                await linu.send(page)
 
     @commands.command()
     @commands.guild_only() 
@@ -103,10 +103,10 @@ class Information:
 
     @commands.command(aliases=['ui', 'user'], no_pm=True)
     @commands.guild_only()
-    async def userinfo(self, ctx, *, member : discord.Member=None):
+    async def userinfo(self, linu, *, member : discord.Member=None):
         '''Get information about a member of a server'''
-        server = ctx.guild
-        user = member or ctx.message.author
+        server = linu.guild
+        user = member or linu.message.author
         avi = user.avatar_url
         roles = sorted(user.roles, key=lambda c: c.position)
 
@@ -117,7 +117,7 @@ class Information:
             color = 0
 
         rolenames = ', '.join([r.name for r in roles if r.name != "@everyone"]) or 'None'
-        time = ctx.message.created_at
+        time = linu.message.created_at
         desc = '{0} is chilling in {1} mode.'.format(user.name, user.status)
         member_number = sorted(server.members, key=lambda m: m.joined_at).index(user) + 1
 
@@ -139,7 +139,7 @@ class Information:
         em.add_field(name='Playing', value=playing, inline=True)
         em.add_field(name='Nick', value=user.nick, inline=True)
         em.add_field(name='Member No.',value=str(member_number),inline = True) 
-        passed = (ctx.message.created_at - user.created_at).days
+        passed = (linu.message.created_at - user.created_at).days
         em.add_field(name='Account Created', value="{} thats over {} days ago".format(user.created_at.__format__('%A, %d. %B %Y'), passed))
         em.add_field(name='Join Date', value=user.joined_at.__format__('%A, %d. %B %Y'))
         em.add_field(name='Roles', value=rolenames, inline=True)
@@ -148,11 +148,11 @@ class Information:
         em.set_author(name=user, icon_url=avi)
 
         try:
-            await ctx.send(embed=em)
+            await linu.send(embed=em)
         except discord.HTTPException:
             em_list = await embedtobox.etb(em)
             for page in em_list:
-                await ctx.send(page)
+                await linu.send(page)
 
 
 

@@ -57,16 +57,16 @@ class Utility:
 
 
     @commands.command(name='help')
-    async def new_help_command(self, ctx, *commands: str):
+    async def new_help_command(self, linu, *commands: str):
         """Shows this message."""
-        destination = ctx.message.author if self.bot.pm_help else ctx.message.channel
+        destination = linu.message.author if self.bot.pm_help else linu.message.channel
 
         def repl(obj):
             return self.bot._mentions_transforms.get(obj.group(0), '')
 
         # help by itself just lists our own commands.
         if len(commands) == 0:
-            pages = await self.bot.formatter.format_help_for(ctx, self.bot)
+            pages = await self.bot.formatter.format_help_for(linu, self.bot)
         elif len(commands) == 1:
             # try to see if it is a cog name
             name = self.bot._mention_pattern.sub(repl, commands[0])
@@ -79,7 +79,7 @@ class Utility:
                     await destination.send(self.bot.command_not_found.format(name))
                     return
 
-            pages = await self.bot.formatter.format_help_for(ctx, command)
+            pages = await self.bot.formatter.format_help_for(linu, command)
         else:
             name = self.bot._mention_pattern.sub(repl, commands[0])
             command = self.bot.all_commands.get(name)
@@ -98,39 +98,39 @@ class Utility:
                     await destination.send(self.bot.command_has_no_subcommands.format(command, key))
                     return
 
-            pages = await self.bot.formatter.format_help_for(ctx, command)
+            pages = await self.bot.formatter.format_help_for(linu, command)
 
         if self.bot.pm_help is None:
             characters = sum(map(lambda l: len(l), pages))
             # modify destination based on length of pages.
             if characters > 1000:
-                destination = ctx.message.author
+                destination = linu.message.author
 
-        color = await ctx.get_dominant_color(ctx.author.avatar_url)
+        color = await linu.get_dominant_color(linu.author.avatar_url)
 
         for embed in pages:
             embed.color = color
             try:
-                await ctx.send(embed=embed)
+                await linu.send(embed=embed)
             except discord.HTTPException:
                 em_list = await embedtobox.etb(embed)
                 for page in em_list:
-                    await ctx.send(page)
+                    await linu.send(page)
 
 
     @commands.command()
-    async def source(self, ctx, *, command):
+    async def source(self, linu, *, command):
         '''See the source code for any command.'''
         try:
             source = str(inspect.getsource(self.bot.get_command(command).callback))
             fmt = '```py\n' + source.replace('`', '\u200b`') + '\n```'
-            await ctx.send(fmt)
+            await linu.send(fmt)
         except AttributeError:
-            await ctx.send("Thats not a command")
+            await linu.send("Thats not a command")
     @commands.group(aliases=['trans'])
-    async def translate(self, ctx):
+    async def translate(self, linu):
         """Translate text!"""
-        if ctx.invoked_subcommand is None:
+        if linu.invoked_subcommand is None:
             cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["translate"].commands])
 
             embed = discord.Embed(
@@ -138,56 +138,56 @@ class Utility:
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={ctx.message.author.name}#{ctx.message.author.discriminator} ID={ctx.message.author.id}")
-            await ctx.send(embed=embed)
+            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            await linu.send(embed=embed)
     @translate.command()
-    async def tr(self, ctx, lang, *, text):
+    async def tr(self, linu, lang, *, text):
         """translate"""
         conv = self.lang_conv
         if lang in conv:
-            return await ctx.send(f'*{translate(text, lang)}*')
+            return await linu.send(f'*{translate(text, lang)}*')
         lang = dict(zip(conv.values(), conv.keys())).get(lang.lower().title())
         if lang:
-            await ctx.send(f'*{translate(text, lang)}*')
+            await linu.send(f'*{translate(text, lang)}*')
         else:
-            await ctx.send('`Language not available.`', delete_after=5)
+            await linu.send('`Language not available.`', delete_after=5)
         try:
-            await ctx.message.delete()
+            await linu.message.delete()
         except discord.Forbidden:
             pass
 
     @translate.command()
-    async def langs(self, ctx): 
+    async def langs(self, linu): 
         '''Lists all available languages'''
         em = discord.Embed(color=0xFFFFFF,
                            title='Available Languages',
                            description=', '.join(codes.values()))
-        await ctx.send(embed=em)
+        await linu.send(embed=em)
 
 
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
-    async def embed(self, ctx, *, edescription: str):
+    async def embed(self, linu, *, edescription: str):
         """makes you a embed"""
         embed = discord.Embed(description=edescription, color=0x36393e)
-        embed.set_footer(text='Requested by:\n{0}'.format(ctx.author))
+        embed.set_footer(text='Requested by:\n{0}'.format(linu.author))
         try:
-            await ctx.message.delete()
-            await ctx.send(embed=embed) 
+            await linu.message.delete()
+            await linu.send(embed=embed) 
         except Exception:
-            await ctx.send(embed=embed)
+            await linu.send(embed=embed)
 
 
     @commands.group(aliases=['rtfd'], invoke_without_command=True)
-    async def rtfm(self, ctx, *, obj: str = None):
+    async def rtfm(self, linu, *, obj: str = None):
         """
         Gives you a documentation link for a discord.py entity.
         Written by Rapptz
         """
-        await self.do_rtfm(ctx, 'rewrite', obj)
+        await self.do_rtfm(linu, 'rewrite', obj)
 
 
-    async def to_embed(self, ctx, params):
+    async def to_embed(self, linu, params):
         '''Actually formats the parsed parameters into an Embed'''
         em = discord.Embed()
 
@@ -207,7 +207,7 @@ class Utility:
                     raw = int(maybe_col.strip('#'), 16)
                     return discord.Color(value=raw)
                 else:
-                    return await ctx.send('Chosen color is not defined.')
+                    return await linu.send('Chosen color is not defined.')
 
             elif color:
                 color = int(color.strip('#'), 16)
@@ -252,7 +252,7 @@ class Utility:
                     em._footer['icon_url'] = data.get('icon')
 
             if 'timestamp' in data.keys() and len(data.keys()) == 1:
-                em.timestamp = ctx.message.created_at
+                em.timestamp = linu.message.created_at
 
         return em
 
@@ -316,15 +316,15 @@ class Utility:
 
         self._rtfm_cache = cache
 
-    async def do_rtfm(self, ctx, key, obj):
+    async def do_rtfm(self, linu, key, obj):
         base_url = 'http://discordpy.rtfd.io/en/{}/'.format(key)
 
         if obj is None:
-            await ctx.send(base_url)
+            await linu.send(base_url)
             return
 
         if not self._rtfm_cache:
-            await ctx.trigger_typing()
+            await linu.trigger_typing()
             await self.build_rtfm_lookup_table()
 
         # identifiers don't have spaces
@@ -362,10 +362,10 @@ class Utility:
 
         e = discord.Embed(colour=discord.Colour.blurple())
         if len(matches) == 0:
-            return await ctx.send('Could not find anything. Sorry.')
+            return await linu.send('Could not find anything. Sorry.')
 
         e.description = '\n'.join('[{}]({}) ({}%)'.format(key, url, p) for key, p, url in matches)
-        await ctx.send(embed=e)
+        await linu.send(embed=e)
 
     def parse_google_card(self, node):
         e = discord.Embed(colour=discord.Colour.blurple())
@@ -655,23 +655,23 @@ class Utility:
         return card, entries
 
     @commands.command(aliases=['g'])
-    async def google(self, ctx, *, query):
+    async def google(self, linu, *, query):
         """Searches google and gives you top result."""
-        await ctx.trigger_typing()
+        await linu.trigger_typing()
         try:
             card, entries = await self.get_google_entries(query)
         except RuntimeError as e:
-            await ctx.send(str(e))
+            await linu.send(str(e))
         else:
             if card:
                 value = '\n'.join(f'[{title}]({url.replace(")", "%29")})' for url,
                                   title in entries[:3])
                 if value:
                     card.add_field(name='Search Results', value=value, inline=False)
-                return await ctx.send(embed=card)
+                return await linu.send(embed=card)
 
             if len(entries) == 0:
-                return await ctx.send('No results found... sorry.')
+                return await linu.send('No results found... sorry.')
 
             next_two = [x[0] for x in entries[1:3]]
             first_entry = entries[0][0]
@@ -684,51 +684,51 @@ class Utility:
             else:
                 msg = first_entry
 
-            await ctx.send(msg)
+            await linu.send(msg)
 
-    async def edit_to_codeblock(self, ctx, body, pycc='blank'):
+    async def edit_to_codeblock(self, linu, body, pycc='blank'):
         if pycc == 'blank':
-            msg = f'{ctx.prefix}eval\n```py\n{body}\n```'
+            msg = f'{linu.prefix}eval\n```py\n{body}\n```'
         else:
-            msg = f'{ctx.prefix}cc make {pycc}\n```py\n{body}\n```'
-        await ctx.message.edit(content=msg)
+            msg = f'{linu.prefix}cc make {pycc}\n```py\n{body}\n```'
+        await linu.message.edit(content=msg)
 
 
 
 
     @commands.command()
-    async def choose(self, ctx, *, choices: commands.clean_content):
+    async def choose(self, linu, *, choices: commands.clean_content):
         '''Choose between multiple choices. Use `,` to seperate choices.'''
         choices = choices.split(',')
         if len(choices) < 2:
-            return await ctx.send('Not enough choices to pick from.')
+            return await linu.send('Not enough choices to pick from.')
         choices[0] = ' ' + choices[0]
-        await ctx.send(str(random.choice(choices))[1:])
+        await linu.send(str(random.choice(choices))[1:])
 
 #    @commands.command()
- #   async def update(self, ctx):
+ #   async def update(self, linu):
   #      '''Auto Update command, checks if you have latest version
    #     Use tags github-token to find out how to set up this token'''
     #    git = self.bot.get_cog('Git')
-     #   if not await git.starred('kyb3r/selfbot.py'): return await ctx.send('**This command is disabled as the user have not starred <https://github.com/kyb3r/selfbot.py>**')
+     #   if not await git.starred('kyb3r/selfbot.py'): return await linu.send('**This command is disabled as the user have not starred <https://github.com/kyb3r/selfbot.py>**')
       #  # get username
        # username = await git.githubusername()
-        #async with ctx.session.get('https://api.github.com/repos/kyb3r/selfbot.py/git/refs/heads/rewrite', headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp:
+        #async with linu.session.get('https://api.github.com/repos/kyb3r/selfbot.py/git/refs/heads/rewrite', headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp:
          #   if 300 > resp.status >= 200:
-          #      async with ctx.session.post(f'https://api.github.com/repos/{username}/selfbot.py/merges', json={"head": (await resp.json())['object']['sha'], "base": "rewrite", "commit_message": "Updating Bot"}, headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp2:
+          #      async with linu.session.post(f'https://api.github.com/repos/{username}/selfbot.py/merges', json={"head": (await resp.json())['object']['sha'], "base": "rewrite", "commit_message": "Updating Bot"}, headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp2:
            #         if 300 > resp2.status >= 200:
             #            if resp2.status == 204:
-             #               return await ctx.send('Already at latest version!')
-              #          await ctx.send('Bot updated! Restarting...')
+             #               return await linu.send('Already at latest version!')
+              #          await linu.send('Bot updated! Restarting...')
                #     else:
                 #        if resp2.status == 409:
-                 #           return await ctx.send('Merge conflict, you did some commits that made this fail!')
-                  #      await ctx.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp2: ```py\n' + str(await resp2.json()) + '\n```')
+                 #           return await linu.send('Merge conflict, you did some commits that made this fail!')
+                  #      await linu.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp2: ```py\n' + str(await resp2.json()) + '\n```')
             #else:
-             #   await ctx.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp: ```py\n' + str(await resp.json()) + '\n```')
+             #   await linu.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp: ```py\n' + str(await resp.json()) + '\n```')
 
     @commands.command(pass_context=True)
-    async def rpoll(self, ctx, *, args):
+    async def rpoll(self, linu, *, args):
         """Create a poll using reactions. {p}help rpoll for more information.
         {p}rpoll <question> | <answer> | <answer> - Create a poll. You may use as many answers as you want, placing a pipe | symbol in between them.
         Example:
@@ -737,7 +737,7 @@ class Utility:
         Example:
         {p}rpoll What time is it? | HAMMER TIME! | SHOWTIME! | time=10
         """
-        await ctx.message.delete()
+        await linu.message.delete()
         options = args.split(" | ")
         time = [x for x in options if x.startswith("time=")]
         if time:
@@ -747,7 +747,7 @@ class Utility:
         if len(options) <= 1:
             raise commands.errors.MissingRequiredArgument
         if len(options) >= 11:
-            return await ctx.send(self.bot.bot_prefix + "You must have 9 options or less.")
+            return await linu.send(self.bot.bot_prefix + "You must have 9 options or less.")
         if time:
             time = int(time.strip("time="))
         else:
@@ -759,11 +759,11 @@ class Utility:
             confirmation_msg += "{} - {}\n".format(emoji[idx], option)
             to_react.append(emoji[idx])
         confirmation_msg += "\n\nYou have {} seconds to vote!".format(time)
-        poll_msg = await ctx.send(confirmation_msg)
+        poll_msg = await linu.send(confirmation_msg)
         for emote in to_react:
             await poll_msg.add_reaction(emote)
         await asyncio.sleep(time)
-        async for message in ctx.message.channel.history():
+        async for message in linu.message.channel.history():
             if message.id == poll_msg.id:
                 poll_msg = message
         results = {}
@@ -783,7 +783,7 @@ class Utility:
         else:
             top_result = options[emoji.index(top_result)+1]
             end_msg += "\n{} is the winner!".format(top_result)
-        await ctx.send(end_msg)
+        await linu.send(end_msg)
 
 def setup(bot):
     bot.add_cog(Utility(bot))
