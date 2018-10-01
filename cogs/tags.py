@@ -31,16 +31,17 @@ import pip
 import json
 import os
 import io
-
+from util import default
 
 class tags:
     def __init__(self, bot):
         self.bot = bot
+        self.channel = default.get("data/channels.json")
 
 
     @commands.command()
     async def tags(self, linu, *, text: str=None):
-        ''' Get useful selfbot tags & tutorials '''
+        ''' Get useful bot tags & tutorials '''
         if text is None:
             return await linu.send(
                 "You cant leave this blank"
@@ -72,7 +73,7 @@ class tags:
 
         em.set_author(name=author_name, icon_url=linu.message.author.avatar_url)
 
-        channel=self.bot.get_channel(492376070767509523) # put channel id here
+        channel=self.bot.get_channel(int(self.channel.tag)) 
         await channel.send(embed=em)
 
         em = discord.Embed(title='Tag suggestion sent!',

@@ -1,5 +1,6 @@
 {
     "token": "***Oh shit, you leaked your token!***\n\n  In some way or another, you have just given your token away.\n  This is not a good thing, as it gives anyone access to the bot/user for that token!\n  You can reset your token in a couple of ways:\n\n  **For bot accounts:**\n  Go to your app page <https://discordapp.com/developers/applications/me and generate a new token there.\n\n  **For user accounts:**\n  Either change your password, or enable/disable 2fa. Either one will change your user token.\n  ",
     "help": "You need help? if there are errors you can join my server and ping me with the error\nOR you can leave a issue on the github for the bot\nif you dont know how to use that bot do linu how and some instructions should come up\n have a good day! ~wolfirik"
+    "add tag" "So you wanna add a tag?\n if the owner set up the config correct then all you gotta do is {prefix} tagrequest {tag name} {whats in the tag}"
 }
 
