@@ -128,11 +128,24 @@ class Utility:
         except AttributeError:
             await ctx.send("Thats not a command")
     @commands.group(aliases=['trans'])
-    async def translate(self, ctx, lang, *, text):
+    async def translate(self, ctx):
         """Translate text!"""
+        if ctx.invoked_subcommand is None:
+            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["translate"].commands])
+
+            embed = discord.Embed(
+                title="Whoops, seems like you didnt use a sub command",
+                description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
+                color=0xFFA500
+            )
+            embed.set_footer(text=f"USER={ctx.message.author.name}#{ctx.message.author.discriminator} ID={ctx.message.author.id}")
+            await ctx.send(embed=embed)
+    @translate.command()
+    async def tr(self, ctx, lang, *, text):
+        """translate"""
         conv = self.lang_conv
         if lang in conv:
-            return await self.bot.say(f'*{translate(text, lang)}*')
+            return await ctx.send(f'*{translate(text, lang)}*')
         lang = dict(zip(conv.values(), conv.keys())).get(lang.lower().title())
         if lang:
             await ctx.send(f'*{translate(text, lang)}*')
@@ -146,7 +159,7 @@ class Utility:
     @translate.command()
     async def langs(self, ctx): 
         '''Lists all available languages'''
-        em = discord.Embed(color=discord.Color.blue(),
+        em = discord.Embed(color=0xFFFFFF,
                            title='Available Languages',
                            description=', '.join(codes.values()))
         await ctx.send(embed=em)
@@ -154,15 +167,15 @@ class Utility:
 
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
-    async def embed(self, linu, *, edescription: str):
+    async def embed(self, ctx, *, edescription: str):
         """makes you a embed"""
         embed = discord.Embed(description=edescription, color=0x36393e)
-        embed.set_footer(text='Requested by:\n{0}'.format(linu.author))
+        embed.set_footer(text='Requested by:\n{0}'.format(ctx.author))
         try:
-            await linu.message.delete()
-            await linu.send(embed=embed) 
+            await ctx.message.delete()
+            await ctx.send(embed=embed) 
         except Exception:
-            await linu.send(embed=embed)
+            await ctx.send(embed=embed)
 
 
     @commands.group(aliases=['rtfd'], invoke_without_command=True)
