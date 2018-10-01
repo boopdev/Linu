@@ -81,46 +81,76 @@ The heartbeat ping {round(self.bot.latency * 1000)}ms
         """ About the bot """
         ramUsage = self.process.memory_full_info().rss / 1024**2
         cpu_usage = round(self.process.cpu_percent() / psutil.cpu_count(), 2)
-        embed = discord.Embed(colour=0xFFA500)
-        embed.set_thumbnail(url=linu.bot.user.avatar_url)
-        embed.add_field(name="Commands",
+        embed = discord.Embed(
+            colour=0xFFA500)
+        embed.set_thumbnail(
+            url=linu.bot.user.avatar_url)
+        embed.add_field(
+            name="Commands",
             value=len([x.name for x in self.bot.commands]), inline=True)
-        embed.add_field(name="Some counter stats",
+        embed.add_field(
+            name="Some counter stats",
             value=f"People ratelimited(Since last restart) " + str(self.bot.counter["ratelimits"]) + "\nCommands ran(since last restart) " + str(self.bot.counter["commands_ran"]) + "\nMessages read(Since last restart) " + str(self.bot.counter["messages_read"]) + " ", inline=False)
-        embed.add_field(name="Library",
+        embed.add_field(
+            name="Library",
             value="discord.py [rewrite]", inline=True)
-        embed.add_field(name="Servers",
+        embed.add_field(
+            name="Servers",
             value=len(linu.bot.guilds), inline=True)
-        embed.add_field(name='Total Users',
+        embed.add_field(
+            name='Total Users',
             value=self.gettotalusers())
-        embed.add_field(name="Platform",
+        embed.add_field(
+            name="Platform",
             value='Linux Ubuntu 18.04 LTS', inline=True)
-        embed.add_field(name="CPU Percentage",
+        embed.add_field(
+            name="CPU Percentage",
             value=f"{cpu_usage}%", inline=True)
-        embed.add_field(name="RAM Currently using",
+        embed.add_field(
+            name="RAM Currently using",
             value=f"{ramUsage:.2f} MB", inline=True)
-        embed.add_field(name="Total RAM",
+        embed.add_field(
+            name="Total RAM",
             value=f"3.8 GB", inline=True)
 
-        embed.add_field(name="Uptime", value=self.get_bot_uptime(), inline=False)
+        embed.add_field(
+            name="Uptime",
+            value=self.get_bot_uptime(), inline=False)
 
-        await linu.send(embed=embed)
+        await linu.send(
+            embed=embed)
 
     @commands.command()
     @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
     async def about(self, linu):
         """info about the bot"""
-        embed = discord.Embed(colour=0xFFA500)
-        embed.set_thumbnail(url=linu.bot.user.avatar_url)
-        embed.add_field(name="Hello!", value="im linu *the small fox from your pocket*\n[no creativity left think somthing later]", inline=False)
-        embed.add_field(name="Dev[s]", value="wolfirik#4041", inline=False)
-        embed.add_field(name="Admin[s]", value="""
-wolfirik#4041
-Syntax#0666
-""", inline=True)
-        embed.add_field(name="Im using", value="discord.py [rewrite]", inline=True)
-        embed.set_footer(text='linu')
-        await linu.send(embed=embed)
+        embed = discord.Embed(
+            colour=0xFFA500)
+        embed.set_thumbnail(
+            url=linu.bot.user.avatar_url)
+        embed.add_field(
+            name="Hello!",
+            value="im linu *the small fox from your pocket*\n[no creativity left think somthing later]",
+            inline=False)
+        embed.add_field(
+            name="Dev[s]",
+            value="wolfirik#4041",
+            inline=False)
+        embed.add_field(
+            name="Admin[s]",
+            value="""
+            wolfirik#4041
+            Syntax#0666
+            """,
+            inline=True)
+        embed.add_field(
+            name="Im using",
+            value="discord.py [rewrite]",
+            inline=True)
+        embed.set_footer(
+            text='linu')
+        await linu.send(
+            embed=embed)
 
 
 def setup(bot):

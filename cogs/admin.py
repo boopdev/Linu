@@ -47,22 +47,33 @@ class Admin:
         except:
             return await linu.send('I dont have perms ;-;')
 
-        em = discord.Embed(title=f'List of Banned Members ({len(bans)}):', color=0xFFA500)
+        em = discord.Embed(
+            title=f'List of Banned Members ({len(bans)}):',
+            color=0xFFA500)
         em.description = ', '.join([str(b.user) for b in bans])
-        await linu.send(embed=em)
+        await linu.send(
+            embed=em)
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
     async def obaninfo(self, linu, *, name_or_id):
         '''Check the reason of a ban from the audit logs.'''
         ban = await linu.get_ban(name_or_id)
-        em = discord.Embed(color=0xFFA500)
-        em.set_author(name=str(ban.user), icon_url=ban.user.avatar_url)
-        em.add_field(name='Reason', value=ban.reason or 'None')
-        em.set_thumbnail(url=ban.user.avatar_url)
-        em.set_footer(text=f'User ID: {ban.user.id}')
+        em = discord.Embed(
+            color=0xFFA500)
+        em.set_author(
+            name=str(ban.user),
+            icon_url=ban.user.avatar_url)
+        em.add_field(
+            name='Reason',
+            value=ban.reason or 'None')
+        em.set_thumbnail(
+            url=ban.user.avatar_url)
+        em.set_footer(
+            text=f'User ID: {ban.user.id}')
 
-        await linu.send(embed=em)
+        await linu.send(
+            embed=em)
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
@@ -102,7 +113,8 @@ class Admin:
             discordStatus = discord.Status.dnd
         elif status == 'online' or status == 'on':
             discordStatus = discord.Status.online
-        await self.bot.change_presence(status=discordStatus)
+        await self.bot.change_presence(
+            status=discordStatus)
         await linu.send(f'**:ok:** Changed status to: **{discordStatus}**')
 
     @commands.command(hidden=True)
@@ -191,8 +203,10 @@ class Admin:
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
-            await linu.send(embed=embed)
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            await linu.send(
+                embed=embed)
 
     @change.command(name="playing")
     @commands.check(repo.is_owner)
@@ -200,7 +214,9 @@ class Admin:
         """ Change playing status. """
         try:
             await self.bot.change_presence(
-                activity=discord.Game(type=0, name=playing),
+                activity=discord.Game(
+                    type=0,
+                    name=playing),
                 status=discord.Status.online
             )
             await linu.send(f"Successfully changed playing status to **{playing}**")
@@ -214,7 +230,8 @@ class Admin:
     async def change_username(self, linu, *, name: str):
         """ Change username. """
         try:
-            await self.bot.user.edit(username=name)
+            await self.bot.user.edit(
+                username=name)
             await linu.send(f"Successfully changed username to **{name}**")
         except discord.HTTPException as err:
             await linu.send(err)
@@ -224,7 +241,8 @@ class Admin:
     async def change_nickname(self, linu, *, name: str = None):
         """ Change nickname. """
         try:
-            await linu.guild.me.edit(nick=name)
+            await linu.guild.me.edit(
+                nick=name)
             if name:
                 await linu.send(f"Successfully changed nickname to **{name}**")
             else:
@@ -242,7 +260,9 @@ class Admin:
             url = url.strip('<>')
 
         try:
-            bio = await http.get(url, res_method="read")
+            bio = await http.get(
+                url,
+                res_method="read")
             await self.bot.user.edit(avatar=bio)
             await linu.send(f"Successfully changed the avatar. Currently using:\n{url}")
         except aiohttp.InvalidURL:

@@ -73,7 +73,10 @@ class Moderator:
     async def kick(self, linu, member: discord.Member, *, reason: str = None):
         """ Kicks a user from the current server. """
         try:
-            await member.kick(reason=default.responsible(linu.author, reason))
+            await member.kick(
+                reason=default.responsible(
+                       linu.author,
+                       reason))
             await linu.send(default.actionmessage("kicked"))
         except Exception as e:
             await linu.send(e)
@@ -87,7 +90,11 @@ class Moderator:
     async def nickname(self, linu, member: discord.Member, *, name: str = None):
         """ Nicknames a user from the current server. """
         try:
-            await member.edit(nick=name, reason=default.responsible(linu.author, "Changed by command"))
+            await member.edit(
+                nick=name,
+                reason=default.responsible(
+                    linu.author,
+                    "Changed by command"))
             message = f"Changed **{member.name}'s** nickname to **{name}**"
             if name is None:
                 message = f"Reset **{member.name}'s** nickname"
@@ -104,7 +111,11 @@ class Moderator:
             await linu.send("You didnt mention someone...?")
             pass
         try:
-            await linu.guild.ban(discord.Object(id=member), reason=default.responsible(linu.author, reason))
+            await linu.guild.ban(discord.Object(
+                id=member),
+                reason=default.responsible(
+                    linu.author,
+                    reason))
             await linu.send(default.actionmessage("banned"))
         except Exception as e:
             await linu.send(e)
@@ -118,7 +129,11 @@ class Moderator:
 
         try:
             for member_id in members:
-                await linu.guild.ban(discord.Object(id=member_id), reason=default.responsible(linu.author, reason))
+                await linu.guild.ban(discord.Object(
+                    id=member_id),
+                reason=default.responsible(
+                    linu.author,
+                    reason))
             await linu.send(default.actionmessage("massbanned", mass=True))
         except Exception as e:
             await linu.send(e)
@@ -132,7 +147,9 @@ class Moderator:
             await linu.send("You didnt mention someone...?")
             pass
         try:
-            await linu.guild.unban(discord.Object(id=member), reason=default.responsible(linu.author, reason))
+            await linu.guild.unban(discord.Object(
+                id=member),
+            reason=default.responsible(linu.author, reason))
             await linu.send(default.actionmessage("unbanned"))
         except Exception as e:
             await linu.send(e)
@@ -152,7 +169,11 @@ class Moderator:
             return await linu.send("Are you sure you've made a role called **Muted**? Remember that it's case sensetive too...")
 
         try:
-            await member.add_roles(therole, reason=default.responsible(linu.author, reason))
+            await member.add_roles(
+                therole,
+                reason=default.responsible(
+                    linu.author,
+                    reason))
             await linu.send(default.actionmessage("muted"))
         except Exception as e:
             await linu.send(e)
@@ -172,7 +193,11 @@ class Moderator:
             return await linu.send("Are you sure you've made a role called **Muted**? Remember that it's case sensetive too...")
 
         try:
-            await member.remove_roles(therole, reason=default.responsible(linu.author, reason))
+            await member.remove_roles(
+                therole,
+                reason=default.responsible(
+                    linu.author,
+                    reason))
             await linu.send(default.actionmessage("unmuted"))
         except Exception as e:
             await linu.send(e)
@@ -190,8 +215,10 @@ class Moderator:
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
-            await linu.send(embed=embed)
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            await linu.send(
+                embed=embed)
 
 
     @role.command()
@@ -243,8 +270,10 @@ class Moderator:
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
-            await linu.send(embed=embed)
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            await linu.send(
+                embed=embed)
 
     @lockdown.command(aliases=['channel'])
     async def chan(self, linu, channel:discord.TextChannel = None, *, reason=None):
@@ -256,7 +285,8 @@ class Moderator:
         else:
             success = True
         emb = await self.format_mod_embed(linu, linu.author, success, 'channel-lockdown', 0, channel)
-        await linu.send(embed=emb)
+        await linu.send(
+            embed=emb)
     
     @lockdown.command()
     async def server(self, linu, server:discord.Guild = None, *, reason=None):
@@ -264,14 +294,25 @@ class Moderator:
         progress = await linu.send(f'Locking down {server.name}')
         try:
             for channel in server.channels:
-                await channel.set_permissions(linu.guild.default_role, overwrite=discord.PermissionOverwrite(send_messages = False), reason=reason)
+                await channel.set_permissions(
+                    linu.guild.default_role,
+                    overwrite=discord.PermissionOverwrite(
+                        send_messages = False),
+                    reason=reason)
         except:
             success = False
         else:
             success = True
-        emb = await self.format_mod_embed(linu, linu.author, success, 'server-lockdown', 0, server)
+        emb = await self.format_mod_embed(
+            linu,
+            linu.author,
+            success,
+            'server-lockdown',
+            0,
+            server)
         progress.delete()
-        await linu.send(embed=emb)
+        await linu.send(
+            embed=emb)
 
 
 def setup(bot):

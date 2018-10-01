@@ -55,30 +55,42 @@ class tags:
 
             e = discord.Embed()
             e.color = await linu.get_dominant_color(url=linu.message.author.avatar_url)
-            e.add_field(name='Tag not found!', value=f"There is not a tag called {text}, why not request one?")
+            e.add_field(
+                name='Tag not found!',
+                value=f"There is not a tag called {text}, why not request one?")
             try:
-                await linu.send(embed=e)
+                await linu.send(
+                    embed=e)
             except Exception as e:
-                await linu.send(f'```{e}```')
+                await linu.send(
+                    f'```{e}```')
 
     @commands.command(aliases=['tag-add'])
     @commands.cooldown(rate=1, per=8.0, type=commands.BucketType.user)
     async def tagrequest(self, linu, *, tag: str):
         """Request a tag"""
-        em = discord.Embed(title="Tag request", description=tag, color=0xff0000)
+        em = discord.Embed(
+            title="Tag request",
+            description=tag,
+            color=0xff0000)
 
         author_name = f"User: {linu.message.author} ({linu.message.author.id}) "
         author_name += (f"Channel: \"{linu.channel.name}\" Guild: \"{linu.guild.name}\""
                         if linu.guild else "through DMs")
 
-        em.set_author(name=author_name, icon_url=linu.message.author.avatar_url)
+        em.set_author(
+            name=author_name,
+            icon_url=linu.message.author.avatar_url)
 
         channel=self.bot.get_channel(int(self.channel.tag)) 
-        await channel.send(embed=em)
+        await channel.send(
+            embed=em)
 
         em = discord.Embed(title='Tag suggestion sent!',
-                           description='Your message has been delivered.', color=0xff0000)
-        await linu.send(embed=em)
+                           description='Your message has been delivered.',
+                           color=0xff0000)
+        await linu.send(
+            embed=em)
 
 def setup(bot):
     bot.add_cog(tags(bot))

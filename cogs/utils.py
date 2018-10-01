@@ -145,12 +145,17 @@ class Utility:
         """translate"""
         conv = self.lang_conv
         if lang in conv:
-            return await linu.send(f'*{translate(text, lang)}*')
+            return await linu.send(
+                f'*{translate(text, lang)}*')
+
         lang = dict(zip(conv.values(), conv.keys())).get(lang.lower().title())
         if lang:
-            await linu.send(f'*{translate(text, lang)}*')
+            await linu.send(
+                f'*{translate(text, lang)}*')
         else:
-            await linu.send('`Language not available.`', delete_after=5)
+            await linu.send(
+                '`Language not available.`',
+                delete_after=5)
         try:
             await linu.message.delete()
         except discord.Forbidden:
@@ -162,7 +167,8 @@ class Utility:
         em = discord.Embed(color=0xFFFFFF,
                            title='Available Languages',
                            description=', '.join(codes.values()))
-        await linu.send(embed=em)
+        await linu.send(
+            embed=em)
 
 
     @commands.command(pass_context=True)
@@ -173,9 +179,12 @@ class Utility:
         embed.set_footer(text='Requested by:\n{0}'.format(linu.author))
         try:
             await linu.message.delete()
-            await linu.send(embed=embed) 
+            await linu.send(
+                embed=embed)
+
         except Exception:
-            await linu.send(embed=embed)
+            await linu.send(
+                embed=embed)
 
 
     @commands.group(aliases=['rtfd'], invoke_without_command=True)
