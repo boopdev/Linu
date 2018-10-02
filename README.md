@@ -24,7 +24,7 @@ Go to data then open blacklist.json and paste the users id, bam they cant use th
 # Emotes 
 
 Just replace the names with what you want
-\:emoji: will get you a emoji id, copy and paste that into the file 
+`\:emoji:` will get you a emoji id, copy and paste that into the file 
 
 # Config
 
