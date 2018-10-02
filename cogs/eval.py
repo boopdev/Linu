@@ -18,7 +18,6 @@ import psutil
 import requests
 from io import BytesIO
 import json
-from util import keyg
 from collections import Counter as count
 
 class evalc:
@@ -73,7 +72,6 @@ class evalc:
             'commands': commands,
             'os': os,
             'emote':  self.emotes,
-            'gen': keyg,
             'counter': count,
             '_': self._last_result
         }

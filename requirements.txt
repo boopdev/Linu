@@ -9,4 +9,4 @@ emoji
 wikipedia
 urban-async
 safygiphy
-logging
+youtube_dl

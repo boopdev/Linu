@@ -1,3 +1,4 @@
 
 data/options.json
 cogs/anti.py
+env/*
