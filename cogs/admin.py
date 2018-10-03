@@ -17,20 +17,25 @@ class Admin:
         self._last_result = None
         self._last_embed = None
 
+        #  TAKEN FROM https://github.com/Skullbite/uwupup/blob/f9c2bd981cc24f690c3a9ee6996c549cdf6ee883/cogs/admin.py#L26  #
+async def run_cmd(cmd: str) -> str:
+    """Runs a subprocess and returns the output."""
+    process =\
+        await asyncio.create_subprocess_shell(
+        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    results = await process.communicate()
+    return "".join(x.decode("utf-8") for x in results)
+
     @commands.command()
     @commands.check(repo.is_owner)
-    async def update(self, linu, branch=str):
-        """do some CMD stuffs"""
-        rb = "```rb\n{0}\n```"
-        await linu.channel.trigger_typing()
-        await asyncio.sleep(3)
-        await linu.send("This may take a bit...")
-        input = os.popen(f'git pull {branch} --no-commit --no-edit --ff-only')
-        output = input.read()
-        await asyncio.sleep(6)
-        await linu.channel.trigger_typing()
-        await asyncio.sleep(2)
-        await linu.send(rb.format(output))
+    async def update(self, linu):
+        """Tries to update the bot"""
+        try:
+            await run_cmd(f'git pull master --no-commit --no-edit --ff-only')
+        except Exception as e:
+            await linu.send(f"{e}")
+
+
 
 
     @commands.command(hidden=True)
