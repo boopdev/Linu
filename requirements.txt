@@ -11,3 +11,5 @@ urban-async
 safygiphy
 youtube_dl
 PyNaCl
+crasync
+cr-py
