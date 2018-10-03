@@ -64,15 +64,6 @@ class LinuClient(AutoShardedBot):
                 print(f'LoadError: {extension}\n'
                       f'{type(e).__name__}: {e}')
 
-    logging.getLogger('discord').setLevel(logging.INFO)
-    logging.getLogger('discord.http').setLevel(logging.DEBUG)
-    logger = logging.getLogger()
-    handler = logging.FileHandler(
-        filename='data/logs/' + datetime.datetime.now().strftime("%Y-%m-%d") + '.log', encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter(
-        '%(asctime)s  %(levelname)s %(name)s\n%(message)s\n\n'))
-    logger.addHandler(handler)
-
 
     @property
     def token(self):
