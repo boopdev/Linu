@@ -30,12 +30,8 @@ class Admin:
         await linu.send("This may take a bit...")
         
         #input = os.popen(f'git pull {branch} --no-commit --no-edit --ff-only')
-        input = os.execv(sys.executable, [f'git pull {branch} --no-commit --no-edit --ff-only'])
-        output = input.read()
-        await asyncio.sleep(6)
-        await linu.channel.trigger_typing()
-        await asyncio.sleep(2)
-        await linu.send(rb.format(output))
+        os.execv(sys.executable, [f'git pull {branch} --no-commit --no-edit --ff-only'])
+
 
 
     @commands.command(hidden=True)
