@@ -18,13 +18,13 @@ class Admin:
 
     @commands.command()
     @commands.check(repo.is_owner)
-    async def update(self, linu):
+    async def update(self, linu, branch=str):
         """do some CMD stuffs"""
         rb = "```rb\n{0}\n```"
         await linu.channel.trigger_typing()
         await asyncio.sleep(3)
         await linu.send("This may take a bit...")
-        input = os.popen('git pull master --no-commit --no-edit --ff-only')
+        input = os.popen(f'git pull {branch} --no-commit --no-edit --ff-only')
         output = input.read()
         await asyncio.sleep(6)
         await linu.channel.trigger_typing()
