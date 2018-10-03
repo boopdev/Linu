@@ -2,6 +2,7 @@ import time
 import aiohttp
 import discord
 import asyncio
+import os
 
 from asyncio.subprocess import PIPE
 from discord.ext import commands
