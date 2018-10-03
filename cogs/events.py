@@ -13,16 +13,16 @@ from ext import fuzzy
 from ext import embedtobox
 from PIL import Image
 
-async def send_cmd_help(self):
-    '''Sends command help'''
-    if self.invoked_subcommand:
-        pages = self.formatter.format_help_for(self, self.invoked_subcommand)
-        for page in pages:
-            await self.send_message(self.message.channel, page)
-    else:
-        pages = self.formatter.format_help_for(self, self.command)
-        for page in pages:
-            await self.send_message(self.message.channel, page)
+#sync def send_cmd_help(self):
+ #   '''Sends command help'''
+  #  if self.invoked_subcommand:
+   #     pages = self.formatter.format_help_for(self, self.invoked_subcommand)
+    #    for page in pages:
+     #       await self.send_message(self.message.channel, page)
+    #else:
+     #   pages = self.formatter.format_help_for(self, self.command)
+      #  for page in pages:
+       #     await self.send_message(self.message.channel, page)
 
 
 class Events:
@@ -41,8 +41,22 @@ class Events:
 
 
     async def on_command_error(self, linu, err): #  g e t   c l a p p e d   e r r o r s
-        if isinstance(err, errors.MissingRequiredArgument) or isinstance(err, errors.BadArgument):
-            await send_cmd_help(linu)
+        if isinstance(err, errors.MissingRequiredArgument):
+            embed = discord.Embed( # look at that sexy embed
+                title="Error :(", # oof
+                description=f"You didnt give any args.... Usage (prefix) (command) (args) NOT (prefix) (command)", # totally user friendly
+                color=0x36393e # l o o k   a t   t h a t 
+            )
+            embed.set_footer(text=f'Linu#4795') 
+            await linu.send(embed=embed) # u s e r   f r i e n d l y
+        if isinstance(err, errors.BadArgument):
+            embed = discord.Embed( # look at that sexy embed
+                title="Error :(", # oof
+                description=f"BadArgument\n\n[Server you can get help in](https://discord.gg/KZ3vXMg)", # totally user friendly
+                color=0x36393e # l o o k   a t   t h a t 
+            )
+            embed.set_footer(text=f'Linu#4795') 
+            await linu.send(embed=embed) # u s e r   f r i e n d l y
 
         elif isinstance(err, errors.CommandInvokeError):
             err = err.original
