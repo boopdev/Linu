@@ -13,14 +13,16 @@ from ext import fuzzy
 from ext import embedtobox
 from PIL import Image
 
-async def send_cmd_help(linu):
-    if linu.invoked_subcommand:
-        _help = await linu.bot.formatter.format_help_for(linu, linu.invoked_subcommand)
+async def send_cmd_help(self):
+    '''Sends command help'''
+    if self.invoked_subcommand:
+        pages = self.formatter.format_help_for(self, self.invoked_subcommand)
+        for page in pages:
+            await self.send_message(self.message.channel, page)
     else:
-        _help = await linu.bot.formatter.format_help_for(linu, linu.command)
-
-    for page in _help:
-        await linu.send(page)
+        pages = self.formatter.format_help_for(self, self.command)
+        for page in pages:
+            await self.send_message(self.message.channel, page)
 
 
 class Events:
@@ -34,7 +36,7 @@ class Events:
         for x in self.bot.guilds:
             for y in x.members:
                 self.totalmembers.add(y.id)
-        return len(self.totalmembers)
+        return len(self.totalmembers) 
 
 
 
