@@ -44,7 +44,7 @@ class Events:
         if isinstance(err, errors.MissingRequiredArgument):
             embed = discord.Embed( # look at that sexy embed
                 title="Error :(", # oof
-                description=f"You didnt give any args.... Usage (prefix) (command) (args) NOT (prefix) (command)", # totally user friendly
+                description=f"You didnt give any args.... Usage (prefix) (command) (args)!", # totally user friendly
                 color=0x36393e # l o o k   a t   t h a t 
             )
             embed.set_footer(text=f'Linu#4795') 

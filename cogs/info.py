@@ -39,6 +39,16 @@ class Information:
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(aliases=['botperms'])
+    @commands.guild_only()
+    async def perms(self, linu):
+        """Shows bots perms"""
+        colour = await linu.get_dominant_color(server.icon_url)
+        memed = discord.Embed(
+            colour=colour,
+            description='Heres what i can do'
+            )
+        memed.set_image(url='https://cdn.discordapp.com/attachments/488980832132923402/497257269998649364/unknown.png')
 
     @commands.command(aliases=['server','si','svi'], no_pm=True)
     @commands.guild_only()
