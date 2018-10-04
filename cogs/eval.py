@@ -92,7 +92,7 @@ class evalc:
 
         self._last_result = result
         if code == "bot.http.token":
-            f = "discord.bot.http.token\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlmfao f in chat retard"
+            f = "discord.bot.http.token\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlmfao f in chat tard"
             memes = BytesIO(f.encode('utf-8'))
             await linu.send(content="OUtpUt too Big", file=discord.File(memes, filename="eval.txt"))
 
