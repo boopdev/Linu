@@ -27,7 +27,6 @@ import datetime
 import asyncio
 import psutil
 import random
-import pip
 import json
 import os
 import io
