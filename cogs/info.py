@@ -39,6 +39,27 @@ class Information:
     def __init__(self, bot):
         self.bot = bot
 
+
+
+    @commands.command()
+    @commands.guild_only()
+    async def credits(self, linu):
+        """People i either used code from or helped me with the bot"""
+        creds = discord.Embed(
+            colour=0xFFA500,
+            description='Credits!'
+            )
+        creds.add_field(
+            name="People who helped",
+            value="Syntax\nSkullbite\nwooosh_")
+        creds.add_field(
+            name="People used code from",
+            value="""
+Skullbite - [owopup](https://github.com/Skullbite/uwupup)
+cgrok - [selfbot.py](https://github.com/cgrok/selfbot.py)
+paixlukee - [siri](https://github.com/paixlukee/Siri)
+""")
+        await linu.send(embed=creds)
     @commands.command(aliases=['botperms'])
     @commands.guild_only()
     async def perms(self, linu):
@@ -48,6 +69,7 @@ class Information:
             description='Heres what i can do'
             )
         memed.set_image(url='https://cdn.discordapp.com/attachments/488980832132923402/497257269998649364/unknown.png')
+        await linu.send(embed=memed)
 
     @commands.command(aliases=['server','si','svi'], no_pm=True)
     @commands.guild_only()
