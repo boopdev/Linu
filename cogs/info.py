@@ -77,6 +77,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
         server = self.bot.get_guild(id=server_id) or linu.guild
         total_users = len(server.members)
         online = len([m for m in server.members if m.status != discord.Status.offline])
+        offline = len([m for m in server.members if m.status == discord.Status.offline])
         text_channels = len([x for x in server.channels if isinstance(x, discord.TextChannel)])
         voice_channels = len([x for x in server.channels if isinstance(x, discord.VoiceChannel)])
         categories = len(server.channels) - text_channels - voice_channels
@@ -93,7 +94,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
             value=str(server.region))
         data.add_field(
             name="Users",
-            value="Online:{} Total:{}".format(online, total_users))
+            value="Online:{} Offline:{} Total:{}".format(online, offline, total_users))
         data.add_field(
             name="Text Channels",
             value=text_channels)
