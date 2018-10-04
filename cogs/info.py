@@ -56,7 +56,6 @@ class Information:
             name="People used code from",
             value="""
 Skullbite - [owopup](https://github.com/Skullbite/uwupup)
-cgrok - [selfbot.py](https://github.com/cgrok/selfbot.py)
 paixlukee - [siri](https://github.com/paixlukee/Siri)
 """)
         await linu.send(embed=creds)
