@@ -43,7 +43,7 @@ class Information:
     @commands.guild_only()
     async def perms(self, linu):
         """Shows bots perms"""
-        colour = await linu.get_dominant_color(server.icon_url)
+        colour = await linu.get_dominant_color(guild.icon_url)
         memed = discord.Embed(
             colour=colour,
             description='Heres what i can do'
