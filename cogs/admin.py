@@ -22,7 +22,7 @@ class Admin:
 
     @commands.command()
     @commands.check(repo.is_owner)
-    async def update(self, linu, branch=str):
+    async def update(self, linu):
         """do some CMD stuffs"""
         rb = "```rb\n{0}\n```"
         await linu.channel.trigger_typing()
@@ -30,10 +30,7 @@ class Admin:
         await linu.send("This may take a bit...")
         
         #input = os.popen(f'git pull {branch} --no-commit --no-edit --ff-only')
-        os.execv(sys.executable, [f'git init'])
-        os.execv(sys.executable, [f'git remote add linu-bot https://github.com/dathidewolf/Linu'])
-        os.execv(sys.executable, [f'git pull {branch} --no-commit --no-edit --ff-only'])
-        os.execv(sys.executable, [f'git pull {branch} --no-commit --no-edit --ff-only'])
+        os.execv(sys.executable, [f'git pull master --no-commit --no-edit --ff-only'])
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
