@@ -2,3 +2,4 @@
 data/options.json
 cogs/anti.py
 env/*
+cogs/evl.py
