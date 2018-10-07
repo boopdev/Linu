@@ -168,8 +168,8 @@ class Admin:
     async def reload(self, linu, name: str):
         """ Reloads an extension. """
         try:
-            self.bot.unload_extension(f"ext.{name}")
-            self.bot.load_extension(f"ext.{name}")
+            self.bot.unload_extension(f"cogs.{name}")
+            self.bot.load_extension(f"cogs.{name}")
         except Exception as e:
             await linu.send(f"```\n{e}```")
             return
@@ -188,7 +188,7 @@ class Admin:
     async def load(self, linu, name: str):
         """ Reloads an extension. """
         try:
-            self.bot.load_extension(f"ext.{name}")
+            self.bot.load_extension(f"cogs.{name}")
         except Exception as e:
             await linu.send(f"```diff\n- {e}```")
             return
@@ -199,7 +199,7 @@ class Admin:
     async def unload(self, linu, name: str):
         """ Reloads an extension. """
         try:
-            self.bot.unload_extension(f"ext.{name}")
+            self.bot.unload_extension(f"cogs.{name}")
         except Exception as e:
             await linu.send(f"```diff\n- {e}```")
             return
