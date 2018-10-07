@@ -12,6 +12,7 @@ from ext.formatter import EmbedHelp
 from ext import context
 from util.chat_formatting import pagify, box
 from pathlib import Path
+from util import permissions, default
 
 
 class welcome:
@@ -25,7 +26,6 @@ class welcome:
 
 
     async def on_member_join(self, member):
-        print(self)
 
         guild = member.guild
         welcome_path = Path(f"data/welcome/{guild.id}.json")
@@ -41,9 +41,12 @@ class welcome:
 
  
         else:
-            print("oof nope")
+            pass
+
+
 
     @commands.group()
+    @permissions.has_permissions(manage_server=True)
     async def welcome(self, linu):
         """Welcomer commands"""
         if linu.invoked_subcommand is None:
@@ -81,6 +84,7 @@ class welcome:
         await linu.send(embed=embed)
 
     @commands.group()
+    @permissions.has_permissions(manage_server=True)
     async def editwelcome(self, linu):
         """Edit your welcome stuff"""
         if linu.invoked_subcommand is None:
