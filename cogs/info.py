@@ -188,7 +188,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
         elif user.activity.type == discord.ActivityType.listening and user.activity.name == "Spotify":                       #Duration: {user.activity.dururation[3:].split(".", 1)[0]} 
             playing = f'{user.name} is listening to spotify! Artists: {user.activity.artists}  Album: {user.activity.album} Track: [HERE](https://open.spotify.com/track/{user.activity.track_id}) '
 
-        elif user.activity.state and user.activity.state is None:
+        elif user.activity.name:
             playing = f'{user.name} is playing {user.activity.name}'
 
         elif user.activity is None:
@@ -242,4 +242,4 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
 
 
 def setup(bot):
-	bot.add_cog(Information(bot))
+    bot.add_cog(Information(bot))
