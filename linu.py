@@ -26,6 +26,7 @@ import textwrap
 import io
 import logging
 from collections import Counter 
+from pathlib import Path
 
 
 
@@ -39,7 +40,9 @@ class LinuClient(AutoShardedBot):
     _mention_pattern = re.compile('|'.join(_mentions_transforms.keys())) 
 
     def __init__(self, **attrs):
-        super().__init__(command_prefix=self.get_pre)
+        super().__init__(
+            command_prefix=self.get_pre,
+            fetch_offline_members=True)
         self.formatter = EmbedHelp()
         self.process = psutil.Process()
         self._extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
@@ -82,7 +85,7 @@ class LinuClient(AutoShardedBot):
         '''Returns the prefix.'''
         with open('data/config.json') as f:
             prefix = json.load(f).get('PREFIX')
-        return os.environ.get('PREFIX') or prefix or 'r.' or f'<@{user_id}> '
+        return os.environ.get('PREFIX') or prefix or f'<@{user_id}> '
 
     def restart(self):
         os.execv(sys.executable, ['python3'] + sys.argv)
@@ -148,7 +151,7 @@ class LinuClient(AutoShardedBot):
 
     async def on_message(self, message):
         '''Responds only to users'''
-        if message.author.id == message.author.bot:
+        if message.author.bot:
             return
         await self.process_commands(message)
 

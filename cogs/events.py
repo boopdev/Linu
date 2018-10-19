@@ -39,7 +39,6 @@ class Events:
         return len(self.totalmembers) 
 
 
-
     async def on_command_error(self, linu, err): #  g e t   c l a p p e d   e r r o r s
         if isinstance(err, errors.MissingRequiredArgument):
             embed = discord.Embed( # look at that sexy embed
@@ -49,10 +48,16 @@ class Events:
             )
             embed.set_footer(text=f'Linu#4795') 
             await linu.send(embed=embed) # u s e r   f r i e n d l y
+
         if isinstance(err, errors.BadArgument):
+
+            _traceback = traceback.format_tb(err.__traceback__)
+            _traceback = ''.join(_traceback)
+            error = ('```py\n{2}{0}: {3}\n```').format(
+                type(err).__name__, linu.message.content, _traceback, err)
             embed = discord.Embed( # look at that sexy embed
                 title="Error :(", # oof
-                description=f"BadArgument\n\n[Server you can get help in](https://discord.gg/KZ3vXMg)", # totally user friendly
+                description=f"BadArgument\n{error}\n\n[Server you can get help in](https://discord.gg/KZ3vXMg)", # totally user friendly
                 color=0x36393e # l o o k   a t   t h a t 
             )
             embed.set_footer(text=f'Linu#4795') 
@@ -75,15 +80,22 @@ class Events:
             self.bot.counter["errors"] += 1 # oof so many errors
 
 
+
         elif isinstance(err, errors.CheckFailure): # for the repo (?)
-            pass
+            embed = discord.Embed( # look at that sexy embed
+                title="Error :(", # oof
+                description=f"Seems you tried to use a command that requires either more permissions or owner\n\nthis incident will be reported and looked at shortly", # totally user friendly
+                color=0x36393e # l o o k   a t   t h a t 
+            )
+            embed.set_footer(text=f'Linu#4795') 
+            await linu.send(embed=embed) # u s e r   f r i e n d l y
 
         elif isinstance(err, errors.CommandOnCooldown): # rate l i m i t
             embed = discord.Embed( # look at that sexy embed
                 domcolor = await linu.get_dominant_color(linu.author.avatar_url), # look at that sexy color
                 title="Ratelimit", # oof
                 description=f"you can use this command in {err.retry_after:.0f} seconds.", # mission failed
-                color=domcolor # we'll get em next time
+                color=0x36393e # we'll get em next time
             )
             embed.set_footer(text='sorry'.format(linu.author)) 
             await linu.send(embed=embed, delete_after=5) # delete after 5 seconds so it dont flood chat
@@ -110,7 +122,7 @@ class Events:
             await to_send.send("Hello! my prefix is 'linu ', to get started use 'linu help'.")
             invite_msg = f"[**Guild Invite**]({invite})"
         if len(bots) > members:
-            sketchy_msg = "\n<:blobdoggothink:444122378260185088> **More Bots than users**"
+            sketchy_msg = "\n**BOT FARM ALERT**"
         else:
             sketchy_msg = ""
 
@@ -154,7 +166,6 @@ class Events:
 
         print(f'Servers: {len(self.bot.guilds)} | Users: {len(set(self.bot.get_all_members()))}')
         print('---------------')
-
     async def on_command(self, linu):
         """Adds one to the counter every command its runs"""
         self.bot.counter["commands_ran"] += 1
