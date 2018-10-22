@@ -238,6 +238,8 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
             em_list = await embedtobox.etb(em)
             for page in em_list:
                 await linu.send(page)
+        except BadArgument:
+            await linu.send("I cant find that user")
 
 
 
