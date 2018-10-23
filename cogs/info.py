@@ -54,7 +54,7 @@ class Information:
 NOTE\nby using this bot and adding it to your server you agree that this bot can make invites for this server(whether your server is private or public(only the owners can see or use the invite))
 and allow bot admins(owners only) to join for support(helping with problems, seeing if servers with more bots than users are bot farms) and etc(anything we(owners) deem worhy of joining)
 if you do not agree to this then you can either join the support server and state you do not want your server have a invite link(we will provide no support for your server unless you come to us with problems)
-join the support server and take it up with the owner or kick the bot and do not use it. **we must for some reason state this or it breaks discords ToS**
+join the support server and take it up with the owner or kick the bot and do not use it. **we must state this or it breaks discords ToS**
 """)
         tos.add_field(
             name="TO SUM THIS UP",
