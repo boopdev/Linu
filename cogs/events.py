@@ -54,8 +54,7 @@ class Events:
 
             _traceback = traceback.format_tb(err.__traceback__)
             _traceback = ''.join(_traceback)
-            error = ('```py\n{2}{0}: {3}\n```').format(
-                type(err).__name__, linu.message.content, _traceback, err)
+            error = ('```py\n{0}\n```').format(err)
             embed = discord.Embed( # look at that sexy embed
                 title="Error :(", # oof
                 description=f"BadArgument\n{error}\n\n[Server you can get help in](https://discord.gg/KZ3vXMg)", # totally user friendly
