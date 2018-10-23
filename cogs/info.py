@@ -43,11 +43,11 @@ class Information:
     @commands.guild_only()
     async def tos(self, linu):
         """statement on using the bot"""
-        creds = discord.Embed(
+        tos = discord.Embed(
             colour=0xFFA500,
             description='By using the bot you agree on this!'
             )
-        creds.add_field(
+        tos.add_field(
             name="v Read below v",
             value="""
 **we must for some reason state this or it breaks discords ToS**
@@ -56,7 +56,7 @@ and allow bot admins(owners only) to join for support(helping with problems, see
 if you do not agree to this then you can either join the support server and state you do not want your server have a invite link(we will provide no support for your server unless you come to us with problems)
 join the support server and take it up with the owner or kick the bot and do not use it. **we must for some reason state this or it breaks discords ToS**
 """)
-        creds.add_field(
+        tos.add_field(
             name="TO SUM THIS UP",
             value="""
 THIS MEANS YOU AGREE TO HAVE THIS BOT CREATE INVITES AND ALLOW BOT ADMINS TO JOIN YOUR SERVER
@@ -64,7 +64,7 @@ https://discordapp.com/developers/docs/legal
 2.4 End User Data. “End User Data” means all data associated with the content within the functionality enabled by the API or SDK, including but not limited to message content, message metadata, voice data and voice metadata. You acknowledge and agree that Discord and its end users, as applicable, retain all worldwide right, title and interest in and to the End User Data. If you have access to End User Data through the API or the SDK, you shall ensure that your Applications do not collect, use and/or disclose End User Data except (a) as necessary to exercise your rights under this Agreement, (b) in accordance with Discord’s Privacy Policy. If you have access to End User Data through the SDK, you additionally agree to get express permission from the End Users.
 
 """)
-        await linu.send(embed=embed)
+        await linu.send(embed=tos)
 
 
     @commands.command()
