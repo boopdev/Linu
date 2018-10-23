@@ -32,6 +32,7 @@ class Events:
         self.totalmembers = set({})
         self.counter = Counter()
 
+
     def gettotalusers(self): # oof not alot of users
         for x in self.bot.guilds:
             for y in x.members:
@@ -119,7 +120,7 @@ class Events:
         except IndexError:
             pass
         else:
-            await to_send.send("Hello! my prefix is 'linu ', to get started use 'linu help'.")
+            await to_send.send("""Hello! my prefix is 'linu ', to get started use 'linu help'.\n`NOTE\nby using this bot and adding it to your server you agree that this bot can make invites for this server(whether your server is private or public(only the owners can see or use the invite)) **we are required to state this** TO SEE THE FULL STATEMENT DO 'linu tos'`""")
             invite_msg = f"[**Guild Invite**]({invite})"
         if len(bots) > members:
             sketchy_msg = "\n**BOT FARM ALERT**"
@@ -158,14 +159,21 @@ class Events:
         """Every message sent (that the bot can see) adds one to the counter"""
         self.bot.counter["messages_read"] += 1 # adds one to counter
 
+
+
+
     async def on_ready(self):
         """When bot is ready it will print how many server and users it is in and set the uptime"""
         if not hasattr(self.bot, 'uptime'):
             self.bot.uptime = datetime.utcnow()
         await self.bot.change_presence(activity=discord.Game(type=0, name=f"with {self.gettotalusers()} users  | linu help"), status=discord.Status.online)
-
         print(f'Servers: {len(self.bot.guilds)} | Users: {len(set(self.bot.get_all_members()))}')
         print('---------------')
+
+
+
+
+
     async def on_command(self, linu):
         """Adds one to the counter every command its runs"""
         self.bot.counter["commands_ran"] += 1
