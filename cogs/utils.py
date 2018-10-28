@@ -127,48 +127,31 @@ class Utility:
             await linu.send(fmt)
         except AttributeError:
             await linu.send("Thats not a command")
-    @commands.group(aliases=['trans'])
-    async def translate(self, linu):
-        """Translate text!"""
-        if linu.invoked_subcommand is None:
-            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["translate"].commands])
 
-            embed = discord.Embed(
-                title="Whoops, seems like you didnt use a sub command",
-                description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
-                color=0xFFA500
-            )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
-            await linu.send(embed=embed)
-    @translate.command()
-    async def tr(self, linu, lang, *, text):
-        """translate"""
+    @commands.group(aliases=['trans'])
+    async def translate(self, ctx, lang, *, text):
+        """Translate text!"""
         conv = self.lang_conv
         if lang in conv:
-            return await linu.send(
-                f'*{translate(text, lang)}*')
-
+            return await ctx.send(f'*{translate(text, lang)}*')
         lang = dict(zip(conv.values(), conv.keys())).get(lang.lower().title())
         if lang:
-            await linu.send(
-                f'*{translate(text, lang)}*')
+            await ctx.send(f'*{translate(text, lang)}*')
         else:
-            await linu.send(
-                '`Language not available.`',
-                delete_after=5)
+            await ctx.send('`Language not available.`', delete_after=5)
         try:
-            await linu.message.delete()
+            await ctx.message.delete()
         except discord.Forbidden:
             pass
 
-    @translate.command()
-    async def langs(self, linu): 
+    @commands.command()
+    async def langs(self, ctx):
         '''Lists all available languages'''
-        em = discord.Embed(color=0xFFFFFF,
+        codes = self.lang_conv
+        em = discord.Embed(color=discord.Color.blue(),
                            title='Available Languages',
                            description=', '.join(codes.values()))
-        await linu.send(
-            embed=em)
+        await ctx.send(embed=em)
 
 
     @commands.command(pass_context=True)
