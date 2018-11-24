@@ -11,7 +11,14 @@ from io import BytesIO
 from util import repo, default, http, dataIO
 from util.chat_formatting import pagify, box
 from ext import embedtobox
+code = "```py\n{0}\n```"
 
+
+async def run_cmd(cmd: str) -> str:
+    """Runs a subprocess and returns the output."""
+    process = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    results = await process.communicate()
+    return "".join(x.decode("utf-8") for x in results)
 class Admin:
     def __init__(self, bot):
         self.bot = bot
