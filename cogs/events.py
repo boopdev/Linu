@@ -104,47 +104,57 @@ class Events:
         elif isinstance(err, errors.CommandNotFound):
             pass # so it dont give errors if you try to do a command thats not a command
 
-    async def on_guild_join(self, guild): # log guild joining
+    async def on_guild_join(self, guild):
         members = set(guild.members)
         bots = filter(lambda m: m.bot, members)
         bots = set(bots)
         members = len(members) - len(bots)
         try:
             to_send = sorted([chan for chan in guild.channels if chan.permissions_for(guild.me).send_messages and isinstance(chan, discord.TextChannel)], key=lambda x: x.position)[0]
+            await to_send.send("Hello! my prefix is 'linu ', to get started use 'linu help'.\n`NOTE\nby using this bot and adding it to your server you agree that this bot can make invites for this server(whether your server is private or public(only the owners can see or use the invite)) **we are required to state this** TO SEE THE FULL STATEMENT DO 'linu tos'`")
             try:
                 invite_chan = sorted([chan for chan in guild.channels if chan.permissions_for(guild.me).create_instant_invite and isinstance(chan, discord.TextChannel)], key=lambda x: x.position)[0]
-                invite = await invite_chan.create_invite(reason="Don't mind me :eyes:")
+                invite = await invite_chan.create_invite(reason="Invite for devs(do not delete)")
             except:
-                invite_msg = "**Invite Unavailable** ?contact owner or leave it?"
+                invite_msg = "**Invite Unavailable**"
         except IndexError:
             pass
         else:
-            await to_send.send("""Hello! my prefix is 'linu ', to get started use 'linu help'.\n`NOTE\nby using this bot and adding it to your server you agree that this bot can make invites for this server(whether your server is private or public(only the owners can see or use the invite)) **we are required to state this** TO SEE THE FULL STATEMENT DO 'linu tos'`""")
-            invite_msg = f"[**Guild Invite**]({invite})"
+            pass
+         #   invite_msg = f"[**Guild Invite**]({invite})"
         if len(bots) > members:
-            sketchy_msg = "\n**BOT FARM ALERT**"
+            sketchy_msg = "\nBot farm alert <@!309025661031415809> <@320576655620046860>"
         else:
             sketchy_msg = ""
 
-        channel = self.bot.get_channel(492376070767509523) # channel ID goes here
-        join = discord.Embed(title="Added to Guild ", description=f"» Name: {guild.name}\n» ID: {guild.id}\n» Reigion: {guild.region}\n» Members/Bots: `{members}:{len(bots)}`\n» Owner: {guild.owner}{sketchy_msg}\n» {invite_msg}", color=0xff00da)
+        join = discord.Embed(title="Added to Guild", description=f"» Name: {guild.name}\n» ID: {guild.id}\n» Reigion: {guild.region}\n» Members/Bots: `{members}:{len(bots)}`\n» Owner: {guild.owner}{sketchy_msg}\n", color=discord.Color.dark_green())
         join.set_thumbnail(url=guild.icon_url)
         join.set_footer(text=f"Total Guilds: {len(self.bot.guilds)}")
-        await channel.send(embed=join)
         await self.bot.change_presence(activity=discord.Game(type=0, name=f"with {self.gettotalusers()} users  | linu help"), status=discord.Status.online)
+        try:
+            channel = self.bot.get_channel(492376070767509523)
+            await channel.send(embed=leave)
+        except Exception as e:
+            print(e)
 
-
-    async def on_guild_remove(self, guild): # log guild leaving
-        channel = self.bot.get_channel(492376070767509523) # channel ID goes here
+    async def on_guild_remove(self, guild):
         members = set(guild.members)
         bots = filter(lambda m: m.bot, members)
         bots = set(bots)
         members = len(members) - len(bots)
-        leave = discord.Embed(title="Removed from Guild", description=f"» Name: {guild.name}\n» ID: {guild.id}\n» Region: {guild.region}\n» Members/Bots: `{members}:{len(bots)}`\n» Owner: {guild.owner}", color=0x9905ac)
+        leave = discord.Embed(title="Removed from Guild", description=f"» Name: {guild.name}\n» ID: {guild.id}\n» Region: {guild.region}\n» Members/Bots: `{members}:{len(bots)}`\n» Owner: {guild.owner}", color=discord.Color.dark_red())
         leave.set_thumbnail(url=guild.icon_url)
         leave.set_footer(text=f"Total Guilds: {len(self.bot.guilds)}")
-        await channel.send(embed=leave)
         await self.bot.change_presence(activity=discord.Game(type=0, name=f"with {self.gettotalusers()} users  | linu help"), status=discord.Status.online)
+        try:
+            channel = self.bot.get_channel(492376070767509523)
+            await channel.send(embed=leave)
+        except Exception as e:
+            print(e)
+
+ 
+
+
 
     async def on_message_edit(self, before, after):
         """Reads edited messages"""
