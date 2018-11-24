@@ -18,6 +18,11 @@ class Admin:
         self._last_result = None
         self._last_embed = None
 
+    @commands.command(hidden=True, aliases=["shell", 'console'])
+    @commands.check(repo.is_owner)
+    async def terminal(self, ctx, *, alice: str):
+        oof = await run_cmd(f'{alice}')
+        await ctx.send(f"```rb\n{oof}\n```")
 
 
     @commands.command()
