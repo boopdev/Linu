@@ -46,7 +46,7 @@ class Information:
         creds = discord.Embed(
             colour=0xFFA500,
             description='By using the bot you agree on this!'
-            )
+        )
         creds.add_field(
             name="v Read below v",
             value="""
@@ -67,7 +67,6 @@ https://discordapp.com/developers/docs/legal
 """)
         await linu.send(embed=creds)
 
-
     @commands.command()
     @commands.guild_only()
     async def credits(self, linu):
@@ -75,7 +74,7 @@ https://discordapp.com/developers/docs/legal
         creds = discord.Embed(
             colour=0xFFA500,
             description='Credits!'
-            )
+        )
         creds.add_field(
             name="People who helped",
             value="Syntax\nSkullbite\nwooosh_")
@@ -86,6 +85,7 @@ Skullbite - [owopup](https://github.com/Skullbite/uwupup)
 paixlukee - [siri](https://github.com/paixlukee/Siri)
 """)
         await linu.send(embed=creds)
+
     @commands.command(aliases=['botperms'])
     @commands.guild_only()
     async def perms(self, linu):
@@ -93,23 +93,29 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
         memed = discord.Embed(
             colour=0xFFA500,
             description='Heres what i can do'
-            )
-        memed.set_image(url='https://cdn.discordapp.com/attachments/488980832132923402/497257269998649364/unknown.png')
+        )
+        memed.set_image(
+            url='https://cdn.discordapp.com/attachments/488980832132923402/497257269998649364/unknown.png')
         await linu.send(embed=memed)
 
-    @commands.command(aliases=['server','si','svi'], no_pm=True)
+    @commands.command(aliases=['server', 'si', 'svi'], no_pm=True)
     @commands.guild_only()
-    async def serverinfo(self, linu, server_id : int=None):
+    async def serverinfo(self, linu, server_id: int = None):
         '''See information about the server.'''
         server = self.bot.get_guild(id=server_id) or linu.guild
         total_users = len(server.members)
-        online = len([m for m in server.members if m.status != discord.Status.offline])
-        offline = len([m for m in server.members if m.status == discord.Status.offline])
-        text_channels = len([x for x in server.channels if isinstance(x, discord.TextChannel)])
-        voice_channels = len([x for x in server.channels if isinstance(x, discord.VoiceChannel)])
+        online = len(
+            [m for m in server.members if m.status != discord.Status.offline])
+        offline = len(
+            [m for m in server.members if m.status == discord.Status.offline])
+        text_channels = len(
+            [x for x in server.channels if isinstance(x, discord.TextChannel)])
+        voice_channels = len(
+            [x for x in server.channels if isinstance(x, discord.VoiceChannel)])
         categories = len(server.channels) - text_channels - voice_channels
         passed = (linu.message.created_at - server.created_at).days
-        created_at = "Since {}. That's over {} days ago!".format(server.created_at.strftime("%d %b %Y %H:%M"), passed)
+        created_at = "Since {}. That's over {} days ago!".format(
+            server.created_at.strftime("%d %b %Y %H:%M"), passed)
 
         colour = await linu.get_dominant_color(server.icon_url)
 
@@ -153,7 +159,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
                 await linu.send(page)
 
     @commands.command()
-    @commands.guild_only() 
+    @commands.guild_only()
     async def baninfo(self, linu, *, name_or_id):
         '''Check the reason of a ban from the audit logs.'''
         ban = await linu.get_ban(name_or_id)
@@ -174,7 +180,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
             embed=em)
 
     @commands.command()
-    @commands.guild_only() 
+    @commands.guild_only()
     async def bans(self, linu):
         '''See a list of banned users in the guild'''
         try:
@@ -191,7 +197,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
 
     @commands.command(aliases=['ui', 'user'], no_pm=True)
     @commands.guild_only()
-    async def userinfo(self, linu, *, member : discord.Member=None):
+    async def userinfo(self, linu, *, member: discord.Member = None):
         '''Get information about a member of a server'''
         server = linu.guild
         user = member or linu.message.author
@@ -204,15 +210,18 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
         if 'color' not in locals():
             color = 0
 
-        rolenames = ', '.join([r.name for r in roles if r.name != "@everyone"]) or 'None'
+        rolenames = ', '.join(
+            [r.name for r in roles if r.name != "@everyone"]) or 'None'
         time = linu.message.created_at
         desc = '{0} is chilling in {1} mode.'.format(user.name, user.status)
-        member_number = sorted(server.members, key=lambda m: m.joined_at).index(user) + 1
+        member_number = sorted(
+            server.members, key=lambda m: m.joined_at).index(user) + 1
 
         if user.activity is None:
             playing = f'{user.name} is not playing anything, or it is not a Rich Presence'
 
-        elif user.activity.type == discord.ActivityType.listening and user.activity.name == "Spotify":                       #Duration: {user.activity.dururation[3:].split(".", 1)[0]} 
+        # Duration: {user.activity.dururation[3:].split(".", 1)[0]}
+        elif user.activity.type == discord.ActivityType.listening and user.activity.name == "Spotify":
             playing = f'{user.name} is listening to spotify! Artists: {user.activity.artists}  Album: {user.activity.album} Track: [HERE](https://open.spotify.com/track/{user.activity.track_id}) '
 
         elif user.activity.name:
@@ -238,7 +247,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
         em.add_field(
             name='Member No.',
             value=str(member_number),
-            inline = True) 
+            inline=True)
         passed = (linu.message.created_at - user.created_at).days
         em.add_field(
             name='Account Created',
@@ -248,7 +257,7 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
             value=user.joined_at.__format__('%A, %d. %B %Y'))
         em.add_field(
             name='Roles',
-            value=rolenames, 
+            value=rolenames,
             inline=True)
         em.set_footer(
             text='User ID: '+str(user.id))
@@ -268,9 +277,6 @@ paixlukee - [siri](https://github.com/paixlukee/Siri)
             em_list = await embedtobox.etb(em)
             for page in em_list:
                 await linu.send(page)
-
-
-
 
 
 def setup(bot):

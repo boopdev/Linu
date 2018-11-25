@@ -38,6 +38,7 @@ class Paginator:
     max_size: int
         The maximum amount of codepoints allowed in a page.
     """
+
     def __init__(self, max_size=1200):
         self.max_size = max_size
         self._current_embed = discord.Embed()
@@ -45,8 +46,6 @@ class Paginator:
         self._count = 0
         self._embeds = []
         self.last_cog = None
-
-
 
     def add_line(self, line='', *, empty=False):
         """Adds a line to the current embed page.
@@ -64,7 +63,8 @@ class Paginator:
             The line was too big for the current :attr:`max_size`.
         """
         if len(line) > self.max_size - 2:
-            raise RuntimeError('Line exceeds maximum page size %s' % (self.max_size - 2))
+            raise RuntimeError(
+                'Line exceeds maximum page size %s' % (self.max_size - 2))
 
         if self._count + len(line) + 1 > self.max_size:
             self.close_page()
@@ -78,18 +78,19 @@ class Paginator:
     def close_page(self):
         """Prematurely terminate a page."""
         name = value = ''
-        while self._current_field: 
-            curr = self._current_field.pop(0) # goes through each line
-            if curr.strip().endswith(':'): # this means its a CogName:
-                if name: 
+        while self._current_field:
+            curr = self._current_field.pop(0)  # goes through each line
+            if curr.strip().endswith(':'):  # this means its a CogName:
+                if name:
                     if value:
                         self._current_embed.add_field(name=name, value=value)
-                        name, value = curr, '' # keeps track of the last cog sent,
-                        self.last_cog = curr  # so the next embed can have a `continued` thing                      
-                else:                          
+                        name, value = curr, ''  # keeps track of the last cog sent,
+                        self.last_cog = curr  # so the next embed can have a `continued` thing
+                else:
                     if value:
                         if self.last_cog:
-                            self._current_embed.add_field(name=f'{self.last_cog} (continued)', value=value)
+                            self._current_embed.add_field(
+                                name=f'{self.last_cog} (continued)', value=value)
                         value = ''
                     name = curr
                     self.last_cog = curr
@@ -97,7 +98,7 @@ class Paginator:
                 value += curr + '\n'
 
         # adds the last parts not done in the while loop
-        #print(self.last_cog)
+        # print(self.last_cog)
         if self.last_cog and value:
             self._current_embed.add_field(name=self.last_cog, value=value)
             value = ''
@@ -105,8 +106,9 @@ class Paginator:
         # this means that there was no `Cog:` title thingys, that means that its a command help
         if value and not self.last_cog:
             fmt = list(filter(None, value.split('\n')))
-            self._current_embed.title = f'``{fmt[0]}``' # command signiture
-            self._current_embed.description = '\n'.join(fmt[1:]) # command desc
+            self._current_embed.title = f'``{fmt[0]}``'  # command signiture
+            self._current_embed.description = '\n'.join(
+                fmt[1:])  # command desc
 
         self._embeds.append(self._current_embed)
         self._current_embed = discord.Embed()
@@ -119,11 +121,12 @@ class Paginator:
         # we have more than just the prefix in our current page
         if len(self._current_field) > 1:
             self.close_page()
-        return self._embeds 
+        return self._embeds
 
     def __repr__(self):
         fmt = '<Paginator max_size: {0.max_size} count: {0._count}>'
         return fmt.format(self)
+
 
 class EmbedHelp(HelpFormatter):
     """The default base implementation that handles formatting of the help
@@ -143,6 +146,7 @@ class EmbedHelp(HelpFormatter):
         The maximum number of characters that fit in a line.
         Defaults to 80.
     """
+
     def __init__(self, show_hidden=False, show_check_failure=False, width=65):
         self.width = width
         self.show_hidden = show_hidden
@@ -171,7 +175,8 @@ class EmbedHelp(HelpFormatter):
         """int: Returns the largest name length of a command or if it has subcommands
         the largest subcommand name."""
         try:
-            commands = self.command.all_commands if not self.is_cog() else self.context.bot.all_commands
+            commands = self.command.all_commands if not self.is_cog(
+            ) else self.context.bot.all_commands
             if commands:
                 return max(map(lambda c: len(c.name) if self.show_hidden or not c.hidden else 0, commands.values()))
             return 0
@@ -197,7 +202,8 @@ class EmbedHelp(HelpFormatter):
     def get_ending_note(self):
         command_name = self.context.invoked_with
         return "Type {0}{1} command for more info on a command.\n" \
-               "You can also type {0}{1} category for more info on a category.\n**If you used Help in DMs it is known to not show all commands and category**".format(self.clean_prefix, command_name)
+               "You can also type {0}{1} category for more info on a category.\n**If you used Help in DMs it is known to not show all commands and category**".format(
+                   self.clean_prefix, command_name)
 
     async def filter_command_list(self):
         """Returns a filtered list of commands based on the two attributes
@@ -232,7 +238,8 @@ class EmbedHelp(HelpFormatter):
             except CommandError:
                 return False
 
-        iterator = self.command.all_commands.items() if not self.is_cog() else self.context.bot.all_commands.items()
+        iterator = self.command.all_commands.items() if not self.is_cog(
+        ) else self.context.bot.all_commands.items()
         if self.show_check_failure:
             return filter(sane_no_suspension_point_predicate, iterator)
 
@@ -251,7 +258,8 @@ class EmbedHelp(HelpFormatter):
                 # skip aliases
                 continue
 
-            entry = '{2.context.prefix}{0:<{width}} {1}'.format(name, command.short_doc, self, width=max_width)
+            entry = '{2.context.prefix}{0:<{width}} {1}'.format(
+                name, command.short_doc, self, width=max_width)
             shortened = self.shorten(entry)
             self._paginator.add_line(f'`{shortened}`')
 
@@ -286,7 +294,8 @@ class EmbedHelp(HelpFormatter):
 
         # we need a padding of ~80 or so
 
-        description = self.command.description if not self.is_cog() else inspect.getdoc(self.command)
+        description = self.command.description if not self.is_cog(
+        ) else inspect.getdoc(self.command)
 
         if description:
             # <description> portion

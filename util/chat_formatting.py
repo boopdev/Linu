@@ -1,6 +1,8 @@
 import itertools
 from typing import Sequence, Iterator
-#Source: https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/redbot/core/utils/chat_formatting.py
+# Source: https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/redbot/core/utils/chat_formatting.py
+
+
 def error(text: str) -> str:
     """Get text prefixed with an error emoji.
     Returns
@@ -55,7 +57,7 @@ def bold(text: str) -> str:
     return "**{}**".format(text)
 
 
-def box(text: str, lang: str="") -> str:
+def box(text: str, lang: str = "") -> str:
     """Get the given text in a code block.
     Parameters
     ----------
@@ -100,7 +102,7 @@ def italics(text: str) -> str:
     return "*{}*".format(text)
 
 
-def bordered(*columns: Sequence[str], ascii_border: bool=False) -> str:
+def bordered(*columns: Sequence[str], ascii_border: bool = False) -> str:
     """Get two blocks of text in a borders.
     Note
     ----
@@ -126,7 +128,8 @@ def bordered(*columns: Sequence[str], ascii_border: bool=False) -> str:
     }
 
     sep = ' ' * 4  # Separator between boxes
-    widths = tuple(max(len(row) for row in column) + 9 for column in columns)  # width of each col
+    widths = tuple(max(len(row) for row in column) +
+                   9 for column in columns)  # width of each col
     colsdone = [False] * len(columns)  # whether or not each column is done
     lines = [sep.join('{TL}' + '{HZ}'*width + '{TR}' for width in widths)]
 
@@ -162,12 +165,12 @@ def bordered(*columns: Sequence[str], ascii_border: bool=False) -> str:
 
 
 def pagify(text: str,
-           delims: Sequence[str]=["\n"],
+           delims: Sequence[str] = ["\n"],
            *,
-           priority: bool=False,
-           escape_mass_mentions: bool=True,
-           shorten_by: int=8,
-           page_length: int=2000) -> Iterator[str]:
+           priority: bool = False,
+           escape_mass_mentions: bool = True,
+           shorten_by: int = 8,
+           page_length: int = 2000) -> Iterator[str]:
     """Generate multiple pages from the given text.
     Note
     ----
@@ -255,8 +258,8 @@ def underline(text: str) -> str:
     return "__{}__".format(text)
 
 
-def escape(text: str, *, mass_mentions: bool=False,
-           formatting: bool=False) -> str:
+def escape(text: str, *, mass_mentions: bool = False,
+           formatting: bool = False) -> str:
     """Get text with all mass mentions or markdown escaped.
     Parameters
     ----------

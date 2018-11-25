@@ -25,10 +25,8 @@ import re
 import textwrap
 import io
 import logging
-from collections import Counter 
+from collections import Counter
 from pathlib import Path
-
-
 
 
 class LinuClient(AutoShardedBot):
@@ -37,7 +35,7 @@ class LinuClient(AutoShardedBot):
         '@here': '@\u200bhere'
     }
 
-    _mention_pattern = re.compile('|'.join(_mentions_transforms.keys())) 
+    _mention_pattern = re.compile('|'.join(_mentions_transforms.keys()))
 
     def __init__(self, **attrs):
         super().__init__(
@@ -45,7 +43,8 @@ class LinuClient(AutoShardedBot):
             fetch_offline_members=True)
         self.formatter = EmbedHelp()
         self.process = psutil.Process()
-        self._extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
+        self._extensions = [x.replace('.py', '')
+                            for x in os.listdir('cogs') if x.endswith('.py')]
         self.last_message = None
         self.commands_used = defaultdict(int)
         self.remove_command('help')
@@ -55,7 +54,8 @@ class LinuClient(AutoShardedBot):
         self.add_command(self.res)
         self.session = aiohttp.ClientSession(loop=self.loop)
         self.check = default.get("data/blacklist.json")
-        self.counter = Counter() # TO UPDATE COUNTERS linu evl bot.counter.update({'messages_read': 8000, 'commands_ran': 80})
+        # TO UPDATE COUNTERS linu evl bot.counter.update({'messages_read': 8000, 'commands_ran': 80})
+        self.counter = Counter()
 
     def load_extensions(self, cogs=None, path='cogs.'):
         '''Loads the default set of extensions or a seperate one if given'''
@@ -66,7 +66,6 @@ class LinuClient(AutoShardedBot):
             except Exception as e:
                 print(f'LoadError: {extension}\n'
                       f'{type(e).__name__}: {e}')
-
 
     @property
     def token(self):
@@ -100,10 +99,10 @@ class LinuClient(AutoShardedBot):
         print('------------------------------------------')
         prefix = input('Enter a prefix for linu:\n> ')
         data = {
-                "TOKEN" : token,
-                "PREFIX" : prefix,
-            }
-        with open('data/config.json','w') as f:
+            "TOKEN": token,
+            "PREFIX": prefix,
+        }
+        with open('data/config.json', 'w') as f:
             f.write(json.dumps(data, indent=4))
         print('------------------------------------------')
         print('Restarting...')
@@ -137,13 +136,12 @@ class LinuClient(AutoShardedBot):
         ---------------
         ---------------
         '''))
-        
 
     async def process_commands(self, message):
         '''p r o c e s s   t h o s e     c o m m a n d s'''
         blcheck = default.get("data/blacklist.json").blacklisted
         if message.author.id in blcheck:
-            return # oof get fucked
+            return  # oof get fucked
         linu = await self.get_context(message, cls=CustomContext)
         if linu.command is None:
             return
@@ -154,7 +152,6 @@ class LinuClient(AutoShardedBot):
         if message.author.bot:
             return
         await self.process_commands(message)
-
 
     @commands.command(aliases=["lo"])
     @commands.check(repo.is_owner)
@@ -169,7 +166,6 @@ class LinuClient(AutoShardedBot):
         except Exception as e:
             await linu.send(f"```py\nError loading {cog}:\n\n{e}\n```")
 
-
     @commands.command()
     @commands.check(repo.is_owner)
     async def res(self, linu):
@@ -182,10 +178,9 @@ class LinuClient(AutoShardedBot):
             print(
                 f"Error in Restarting:\n{e}")
 
-
     @commands.command(aliases=["re"])
     @commands.check(repo.is_owner)
-    async def relcog(self, linu, *, cog: str): 
+    async def relcog(self, linu, *, cog: str):
         """ Reload any cog """
         cog = f"cogs.{cog}"
         await linu.send(f"Preparing to reload {cog}...", delete_after=10)

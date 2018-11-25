@@ -22,10 +22,10 @@ def shlex_split(body):
     for index, char in enumerate(body):
 
         if char == '"':
-            if body[index-1] != '\\': # escapes
+            if body[index-1] != '\\':  # escapes
                 is_quoted = True
                 is_first = False if is_first else True
-                    
+
         if is_quoted:
             curr += char
             if not is_first:
@@ -46,16 +46,12 @@ def shlex_split(body):
             else:
                 args.append(curr)
 
-    args = list(filter(lambda x: x.strip(), args)) # takes out spaces
+    args = list(filter(lambda x: x.strip(), args))  # takes out spaces
 
     for i, arg in enumerate(args):
-        arg = arg.replace('\\"', '"') # escapes
+        arg = arg.replace('\\"', '"')  # escapes
         if arg.count(' '):
-            arg = arg.strip('"') # removes the quotes
+            arg = arg.strip('"')  # removes the quotes
         args[i] = arg
 
     return args
-
-
-
-

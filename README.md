@@ -1,8 +1,8 @@
 # Linu
 
-My server [here](https://discord.gg/KZ3vXMg)
-If you need help i can *try* to help you, message me on discord wolfirik#4041
-**you can add linu with [this link](https://discordapp.com/api/oauth2/authorize?client_id=488973326883094541&permissions=67423297&scope=bot)**
+My server[here](https: // discord.gg/KZ3vXMg)
+If you need help i can * try* to help you, message me on discord wolfirik  # 4041
+**you can add linu with [this link](https: // discordapp.com/api/oauth2/authorize?client_id=488973326883094541 & permissions=67423297 & scope=bot)**
 
 # Installing
 
@@ -21,12 +21,12 @@ Copy the users id.
 Go to data then open blacklist.json and paste the users id, bam they cant use the bot.
 
 
-# Emotes 
+# Emotes
 
 Just replace the names with what you want
-`\:emoji:` will get you a emoji id, copy and paste that into the file 
+`\: emoji: ` will get you a emoji id, copy and paste that into the file
 
 # Config
 
-Owners can do all commands (not moderation)
+Owners can do all commands(not moderation)
 Admins cant do anything(*yet*) same for helpers

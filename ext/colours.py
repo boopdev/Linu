@@ -147,31 +147,29 @@ class ColorNames:
     WebColorMap["White Smoke"] = "#F5F5F5"
     WebColorMap["Yellow"] = "#FFFF00"
     WebColorMap["Yellow Green"] = "#9ACD32"
-    
+
     @staticmethod
-    def rgbFromStr(s):  
-        # s starts with a #.  
-        r, g, b = int(s[1:3],16), int(s[3:5], 16),int(s[5:7], 16)  
-        return r, g, b  
-    
+    def rgbFromStr(s):
+        # s starts with a #.
+        r, g, b = int(s[1:3], 16), int(s[3:5], 16), int(s[5:7], 16)
+        return r, g, b
+
     @staticmethod
     def color_name(s):
-        r, g, b = int(s[1:3],16), int(s[3:5], 16),int(s[5:7], 16)  
-        return ColorNames.findNearestWebColorName(r, g, b) 
-    
-    @staticmethod
-    def findNearestWebColorName(R,G,B):  
-        return ColorNames.findNearestColorName(R,G,B,ColorNames.WebColorMap)
-    
-    @staticmethod
-    def findNearestColorName(R,G,B,Map):  
-        mindiff = None
-        for d in Map:  
-            r, g, b = ColorNames.rgbFromStr(Map[d])  
-            diff = abs(R -r)*256 + abs(G-g)* 256 + abs(B- b)* 256   
-            if mindiff is None or diff < mindiff:  
-                mindiff = diff  
-                mincolorname = d  
-        return mincolorname             
-  
+        r, g, b = int(s[1:3], 16), int(s[3:5], 16), int(s[5:7], 16)
+        return ColorNames.findNearestWebColorName(r, g, b)
 
+    @staticmethod
+    def findNearestWebColorName(R, G, B):
+        return ColorNames.findNearestColorName(R, G, B, ColorNames.WebColorMap)
+
+    @staticmethod
+    def findNearestColorName(R, G, B, Map):
+        mindiff = None
+        for d in Map:
+            r, g, b = ColorNames.rgbFromStr(Map[d])
+            diff = abs(R - r)*256 + abs(G-g) * 256 + abs(B - b) * 256
+            if mindiff is None or diff < mindiff:
+                mindiff = diff
+                mincolorname = d
+        return mincolorname

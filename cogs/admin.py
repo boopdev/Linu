@@ -19,6 +19,8 @@ async def run_cmd(cmd: str) -> str:
     process = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     results = await process.communicate()
     return "".join(x.decode("utf-8") for x in results)
+
+
 class Admin:
     def __init__(self, bot):
         self.bot = bot
@@ -31,7 +33,6 @@ class Admin:
         oof = await run_cmd(f'{alice}')
         await ctx.send(f"```rb\n{oof}\n```")
 
-
     @commands.command()
     @commands.check(repo.is_owner)
     async def update(self, linu):
@@ -40,9 +41,10 @@ class Admin:
         await linu.channel.trigger_typing()
         await asyncio.sleep(3)
         await linu.send("This may take a bit...")
-        
+
         #input = os.popen(f'git pull {branch} --no-commit --no-edit --ff-only')
-        os.execv(sys.executable, [f'git pull master --no-commit --no-edit --ff-only'])
+        os.execv(sys.executable, [
+                 f'git pull master --no-commit --no-edit --ff-only'])
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
@@ -65,10 +67,10 @@ class Admin:
     @commands.check(repo.is_owner)
     async def obans(self, linu):
         '''See a list of banned users in the guild'''
-        # m m m  g i m m i e  t h o s e  b a n s 
+        # m m m  g i m m i e  t h o s e  b a n s
         try:
             bans = await linu.guild.bans()
-        # no perms 
+        # no perms
         except:
             return await linu.send('I dont have perms ;-;')
 
@@ -119,11 +121,11 @@ class Admin:
             bots = filter(lambda m: m.bot, members)
             bots = set(bots)
             members = len(members) - len(bots)
-            msg += "`{}:` {} `{} members, {} bots` \n".format(i, guild.name, members, len(bots))
+            msg += "`{}:` {} `{} members, {} bots` \n".format(
+                i, guild.name, members, len(bots))
 
         for page in pagify(msg, ['\n']):
             await linu.send(page)
-
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
@@ -153,7 +155,6 @@ class Admin:
         except Exception as e:
             await linu.send(e)
 
-
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
     async def guildsl(self, linu):
@@ -171,7 +172,6 @@ class Admin:
 
         if linu.author.id in self.config.owners:
             return await linu.send(f"Yes **{linu.author.name}** you are admin rank! ✅")
-
 
         await linu.send(f"no, you dont have any owner/dev perms {linu.author.name}")
 
@@ -221,7 +221,8 @@ class Admin:
     @commands.check(repo.is_owner)
     async def change(self, linu):
         if linu.invoked_subcommand is None:
-            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["change"].commands])
+            cmds = "\n".join(
+                [f"{x.name} - {x.help}" for x in self.bot.all_commands["change"].commands])
 
             embed = discord.Embed(
                 title="Whoops, seems like you didnt use a sub command",

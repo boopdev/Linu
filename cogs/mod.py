@@ -40,14 +40,16 @@ class MemberID(commands.Converter):
             try:
                 return int(argument, base=10)
             except ValueError:
-                raise commands.BadArgument(f"{argument} is not a valid member or member ID.") from None
+                raise commands.BadArgument(
+                    f"{argument} is not a valid member or member ID.") from None
         else:
             can_execute = linu.author.id == linu.bot.owner_id or \
-                          linu.author == linu.guild.owner or \
-                          linu.author.top_role > m.top_role
+                linu.author == linu.guild.owner or \
+                linu.author.top_role > m.top_role
 
             if not can_execute:
-                raise commands.BadArgument('You cannot do this action on this user due to role hierarchy.')
+                raise commands.BadArgument(
+                    'You cannot do this action on this user due to role hierarchy.')
             return m.id
 
 
@@ -57,15 +59,14 @@ class ActionReason(commands.Converter):
 
         if len(ret) > 512:
             reason_max = 512 - len(ret) - len(argument)
-            raise commands.BadArgument(f'reason is too long ({len(argument)}/{reason_max})')
+            raise commands.BadArgument(
+                f'reason is too long ({len(argument)}/{reason_max})')
         return ret
 
 
 class Moderator:
     def __init__(self, bot):
         self.bot = bot
-
-
 
     @commands.command()
     @commands.guild_only()
@@ -77,8 +78,6 @@ class Moderator:
             await linu.send(default.actionmessage("kicked"))
         except Exception as e:
             await linu.send(e)
-
-
 
     @commands.command(aliases=["nick"])
     @commands.guild_only()
@@ -183,16 +182,17 @@ class Moderator:
     async def role(self, linu):
         """Roles commands"""
         if linu.invoked_subcommand is None:
-            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["role"].commands])
+            cmds = "\n".join(
+                [f"{x.name} - {x.help}" for x in self.bot.all_commands["role"].commands])
 
             embed = discord.Embed(
                 title="Whoops, seems like you didnt use a sub command",
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
             await linu.send(embed=embed)
-
 
     @role.command()
     @commands.guild_only()
@@ -205,7 +205,8 @@ class Moderator:
         if rolename is None:
             linu.send("Give a role please")
 
-        role = discord.utils.find(lambda m: rolename.lower() in m.name.lower(), linu.message.guild.roles)
+        role = discord.utils.find(lambda m: rolename.lower(
+        ) in m.name.lower(), linu.message.guild.roles)
         if not role:
             return await linu.send('That role does not exist.')
         try:
@@ -214,13 +215,13 @@ class Moderator:
         except:
             await linu.send("I don't have the perms to add that role.")
 
-
     @role.command()
     @commands.guild_only()
     @permissions.has_permissions(manage_roles=True)
     async def removerole(self, linu, member: discord.Member, *, rolename: str):
         '''Remove a role from someone else.'''
-        role = discord.utils.find(lambda m: rolename.lower() in m.name.lower(), linu.message.guild.roles)
+        role = discord.utils.find(lambda m: rolename.lower(
+        ) in m.name.lower(), linu.message.guild.roles)
         if not role:
             return await linu.send('That role does not exist.')
         try:
@@ -229,41 +230,44 @@ class Moderator:
         except:
             await linu.send("I don't have the perms to remove that role.")
 
-
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @permissions.has_permissions(manage_server=True)
     async def lockdown(self, linu):
         """Server/Channel lockdown"""
         if linu.invoked_subcommand is None:
-            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["lockdown"].commands])
+            cmds = "\n".join(
+                [f"{x.name} - {x.help}" for x in self.bot.all_commands["lockdown"].commands])
 
             embed = discord.Embed(
                 title="Whoops, seems like you didnt use a sub command",
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
             await linu.send(embed=embed)
 
     @lockdown.command(aliases=['channel'])
-    async def chan(self, linu, channel = None,  *, reason = None):
-        if channel is None: channel = linu.channel
+    async def chan(self, linu, channel=None,  *, reason=None):
+        if channel is None:
+            channel = linu.channel
         try:
-            await channel.set_permissions(linu.guild.default_role, overwrite=discord.PermissionOverwrite(send_messages = False), reason=reason)
+            await channel.set_permissions(linu.guild.default_role, overwrite=discord.PermissionOverwrite(send_messages=False), reason=reason)
             await linu.send("Done")
         except Exception as e:
             await linu.send(e)
+
     @lockdown.command()
-    async def server(self, linu, server:discord.Guild = None, *, reason=None):
-        if server is None: server = linu.guild
+    async def server(self, linu, server: discord.Guild = None, *, reason=None):
+        if server is None:
+            server = linu.guild
         try:
             for channel in server.channels:
-                await channel.set_permissions(linu.guild.default_role, overwrite=discord.PermissionOverwrite(send_messages = False), reason=reason)
+                await channel.set_permissions(linu.guild.default_role, overwrite=discord.PermissionOverwrite(send_messages=False), reason=reason)
                 await linu.send("Done")
         except Exception as e:
             await linu.send(e)
-
 
 
 def setup(bot):

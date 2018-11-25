@@ -9,9 +9,9 @@ import base64
 from ext.formatter import EmbedHelp
 
 
-
 class CustomContext(commands.Context):
     '''Custom Context class to provide utility.'''
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.formatter = EmbedHelp()
@@ -57,7 +57,7 @@ class CustomContext(commands.Context):
         '''Small helper for confirmation messages.'''
         await self.send(msg or '*Are you sure you want to proceed?* `(Y/N)`')
         resp = self.bot.wait_for('message', check=lambda m: m == ctx.author)
-        falsy = ['n', 'no', 'false','0','fuck off','f']
+        falsy = ['n', 'no', 'false', '0', 'fuck off', 'f']
         if resp.content.lower().strip() in falsy:
             return False
         else:
@@ -66,7 +66,8 @@ class CustomContext(commands.Context):
     async def send_cmd_help(self):
         '''Sends command help'''
         if self.invoked_subcommand:
-            pages = self.formatter.format_help_for(self, self.invoked_subcommand)
+            pages = self.formatter.format_help_for(
+                self, self.invoked_subcommand)
             for page in pages:
                 await self.send_message(self.message.channel, page)
         else:
@@ -105,7 +106,7 @@ class CustomContext(commands.Context):
                 color = ColorThief(f).get_color(quality=quality)
             except:
                 return discord.Color.dark_grey()
-            
+
         return discord.Color.from_rgb(*color)
 
     async def success(self, msg=None, delete=False):
@@ -121,9 +122,6 @@ class CustomContext(commands.Context):
             await self.send(msg)
         else:
             await self.message.add_reaction('⁉')
-
-    
-
 
     @staticmethod
     def paginate(text: str):

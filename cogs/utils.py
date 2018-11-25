@@ -44,6 +44,7 @@ import json
 import base64
 import requests
 
+
 class Utility:
     '''Useful commands to make your life easier'''
 
@@ -54,7 +55,6 @@ class Utility:
         self._rtfm_cache = None
         self._last_google = None
         self._last_result = None
-
 
     @commands.command(name='help')
     async def new_help_command(self, linu, *commands: str):
@@ -117,12 +117,12 @@ class Utility:
                 for page in em_list:
                     await linu.send(page)
 
-
     @commands.command()
     async def source(self, linu, *, command):
         '''See the source code for any command.'''
         try:
-            source = str(inspect.getsource(self.bot.get_command(command).callback))
+            source = str(inspect.getsource(
+                self.bot.get_command(command).callback))
             fmt = '```py\n' + source.replace('`', '\u200b`') + '\n```'
             await linu.send(fmt)
         except AttributeError:
@@ -153,7 +153,6 @@ class Utility:
                            description=', '.join(codes.values()))
         await ctx.send(embed=em)
 
-
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
     async def embed(self, linu, *, edescription: str):
@@ -169,7 +168,6 @@ class Utility:
             await linu.send(
                 embed=embed)
 
-
     @commands.group(aliases=['rtfd'], invoke_without_command=True)
     async def rtfm(self, linu, *, obj: str = None):
         """
@@ -177,7 +175,6 @@ class Utility:
         Written by Rapptz
         """
         await self.do_rtfm(linu, 'rewrite', obj)
-
 
     async def to_embed(self, linu, params):
         '''Actually formats the parsed parameters into an Embed'''
@@ -228,7 +225,8 @@ class Utility:
                     em._author['url'] = url
 
             field, value = data.get('field'), data.get('value')
-            inline = False if str(data.get('inline')).lower() == 'false' else True
+            inline = False if str(
+                data.get('inline')).lower() == 'false' else True
             if field and value:
                 em.add_field(name=field, value=value, inline=inline)
 
@@ -295,7 +293,8 @@ class Utility:
             for page in pages:
                 async with self.bot.session.get(page) as resp:
                     if resp.status != 200:
-                        raise RuntimeError('Cannot build rtfm lookup table, try again later.')
+                        raise RuntimeError(
+                            'Cannot build rtfm lookup table, try again later.')
 
                     text = await resp.text(encoding='utf-8')
                     root = etree.fromstring(text, etree.HTMLParser())
@@ -303,7 +302,8 @@ class Utility:
                         nodes = root.findall(".//dt/a[@class='headerlink']")
                         for node in nodes:
                             href = node.get('href', '')
-                            as_key = href.replace('#discord.', '').replace('ext.commands.', '')
+                            as_key = href.replace('#discord.', '').replace(
+                                'ext.commands.', '')
                             sub[as_key] = page + href
 
         self._rtfm_cache = cache
@@ -356,7 +356,8 @@ class Utility:
         if len(matches) == 0:
             return await linu.send('Could not find anything. Sorry.')
 
-        e.description = '\n'.join('[{}]({}) ({}%)'.format(key, url, p) for key, p, url in matches)
+        e.description = '\n'.join('[{}]({}) ({}%)'.format(
+            key, url, p) for key, p, url in matches)
         await linu.send(embed=e)
 
     def parse_google_card(self, node):
@@ -376,7 +377,8 @@ class Utility:
 
         # check for unit conversion card
 
-        unit_conversions = node.xpath(".//input[contains(@class, '_eif') and @value]")
+        unit_conversions = node.xpath(
+            ".//input[contains(@class, '_eif') and @value]")
         if len(unit_conversions) == 2:
             e.title = 'Unit Conversion'
 
@@ -388,7 +390,8 @@ class Utility:
             # The first unit being converted (e.g. Miles)
             # The second unit being converted (e.g. Feet)
 
-            xpath = etree.XPath("parent::div/select/option[@selected='1']/text()")
+            xpath = etree.XPath(
+                "parent::div/select/option[@selected='1']/text()")
             try:
                 first_node = unit_conversions[0]
                 first_unit = xpath(first_node)[0]
@@ -405,20 +408,24 @@ class Utility:
 
         # check for currency conversion card
         if 'currency' in node.get('class', ''):
-            currency_selectors = node.xpath(".//div[@class='ccw_unit_selector_cnt']")
+            currency_selectors = node.xpath(
+                ".//div[@class='ccw_unit_selector_cnt']")
             if len(currency_selectors) == 2:
                 e.title = 'Currency Conversion'
                 # Inside this <div> is a <select> with <option selected="1"> nodes
                 # just like the unit conversion card.
 
                 first_node = currency_selectors[0]
-                first_currency = first_node.find("./select/option[@selected='1']")
+                first_currency = first_node.find(
+                    "./select/option[@selected='1']")
 
                 second_node = currency_selectors[1]
-                second_currency = second_node.find("./select/option[@selected='1']")
+                second_currency = second_node.find(
+                    "./select/option[@selected='1']")
 
                 # The parent of the nodes have a <input class='vk_gy vk_sh ccw_data' value=...>
-                xpath = etree.XPath("parent::td/parent::tr/td/input[@class='vk_gy vk_sh ccw_data']")
+                xpath = etree.XPath(
+                    "parent::td/parent::tr/td/input[@class='vk_gy vk_sh ccw_data']")
                 try:
                     first_value = float(xpath(first_node)[0].get('value'))
                     second_value = float(xpath(second_node)[0].get('value'))
@@ -455,17 +462,21 @@ class Utility:
         translation = node.find(".//div[@id='tw-ob']")
         if translation is not None:
             src_text = translation.find(".//pre[@id='tw-source-text']/span")
-            src_lang = translation.find(".//select[@id='tw-sl']/option[@selected='1']")
+            src_lang = translation.find(
+                ".//select[@id='tw-sl']/option[@selected='1']")
 
             dest_text = translation.find(".//pre[@id='tw-target-text']/span")
-            dest_lang = translation.find(".//select[@id='tw-tl']/option[@selected='1']")
+            dest_lang = translation.find(
+                ".//select[@id='tw-tl']/option[@selected='1']")
 
             # TODO: bilingual dictionary nonsense?
 
             e.title = 'Translation'
             try:
-                e.add_field(name=src_lang.text, value=src_text.text, inline=True)
-                e.add_field(name=dest_lang.text, value=dest_text.text, inline=True)
+                e.add_field(name=src_lang.text,
+                            value=src_text.text, inline=True)
+                e.add_field(name=dest_lang.text,
+                            value=dest_text.text, inline=True)
             except Exception:
                 return None
             else:
@@ -659,7 +670,8 @@ class Utility:
                 value = '\n'.join(f'[{title}]({url.replace(")", "%29")})' for url,
                                   title in entries[:3])
                 if value:
-                    card.add_field(name='Search Results', value=value, inline=False)
+                    card.add_field(name='Search Results',
+                                   value=value, inline=False)
                 return await linu.send(embed=card)
 
             if len(entries) == 0:
@@ -685,9 +697,6 @@ class Utility:
             msg = f'{linu.prefix}cc make {pycc}\n```py\n{body}\n```'
         await linu.message.edit(content=msg)
 
-
-
-
     @commands.command()
     async def choose(self, linu, *, choices: commands.clean_content):
         '''Choose between multiple choices. Use `,` to seperate choices.'''
@@ -705,19 +714,19 @@ class Utility:
      #   if not await git.starred('kyb3r/selfbot.py'): return await linu.send('**This command is disabled as the user have not starred <https://github.com/kyb3r/selfbot.py>**')
       #  # get username
        # username = await git.githubusername()
-        #async with linu.session.get('https://api.github.com/repos/kyb3r/selfbot.py/git/refs/heads/rewrite', headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp:
-         #   if 300 > resp.status >= 200:
-          #      async with linu.session.post(f'https://api.github.com/repos/{username}/selfbot.py/merges', json={"head": (await resp.json())['object']['sha'], "base": "rewrite", "commit_message": "Updating Bot"}, headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp2:
-           #         if 300 > resp2.status >= 200:
-            #            if resp2.status == 204:
-             #               return await linu.send('Already at latest version!')
-              #          await linu.send('Bot updated! Restarting...')
-               #     else:
-                #        if resp2.status == 409:
-                 #           return await linu.send('Merge conflict, you did some commits that made this fail!')
-                  #      await linu.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp2: ```py\n' + str(await resp2.json()) + '\n```')
-            #else:
-             #   await linu.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp: ```py\n' + str(await resp.json()) + '\n```')
+        # async with linu.session.get('https://api.github.com/repos/kyb3r/selfbot.py/git/refs/heads/rewrite', headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp:
+        #   if 300 > resp.status >= 200:
+        #      async with linu.session.post(f'https://api.github.com/repos/{username}/selfbot.py/merges', json={"head": (await resp.json())['object']['sha'], "base": "rewrite", "commit_message": "Updating Bot"}, headers={"Authorization": f"Bearer {git.githubtoken}"}) as resp2:
+        #         if 300 > resp2.status >= 200:
+        #            if resp2.status == 204:
+        #               return await linu.send('Already at latest version!')
+        #          await linu.send('Bot updated! Restarting...')
+        #     else:
+        #        if resp2.status == 409:
+        #           return await linu.send('Merge conflict, you did some commits that made this fail!')
+        #      await linu.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp2: ```py\n' + str(await resp2.json()) + '\n```')
+        # else:
+        #   await linu.send('Well, I failed somehow, send the following to `4JR#2713` (180314310298304512) - resp: ```py\n' + str(await resp.json()) + '\n```')
 
     @commands.command(pass_context=True)
     async def rpoll(self, linu, *, args):
@@ -764,18 +773,21 @@ class Utility:
                 results[reaction.emoji] = reaction.count - 1
         end_msg = "The poll is over. The results:\n\n"
         for result in results:
-            end_msg += "{} {} - {} votes\n".format(result, options[emoji.index(result)+1], results[result])
+            end_msg += "{} {} - {} votes\n".format(
+                result, options[emoji.index(result)+1], results[result])
         top_result = max(results, key=lambda key: results[key])
         if len([x for x in results if results[x] == results[top_result]]) > 1:
             top_results = []
             for key, value in results.items():
                 if value == results[top_result]:
                     top_results.append(options[emoji.index(key)+1])
-            end_msg += "\nThe victory is tied between: {}".format(", ".join(top_results))
+            end_msg += "\nThe victory is tied between: {}".format(
+                ", ".join(top_results))
         else:
             top_result = options[emoji.index(top_result)+1]
             end_msg += "\n{} is the winner!".format(top_result)
         await linu.send(end_msg)
+
 
 def setup(bot):
     bot.add_cog(Utility(bot))

@@ -20,6 +20,7 @@ from io import BytesIO
 import json
 from collections import Counter as count
 
+
 class evalc:
     """Eval command"""
 
@@ -52,8 +53,6 @@ class evalc:
     def get_pages(msg: str):
         """Pagify the given message for output to the user."""
         return pagify(msg, delims=["\n", " "], priority=True, shorten_by=10)
-
-
 
     @commands.command()
     @commands.check(repo.is_owner)
@@ -107,6 +106,7 @@ class evalc:
                     await linu.send(result)
                 except Exception as e:
                     await linu.send(f"`{e}`")
+
 
 def setup(bot):
     bot.add_cog(evalc(bot))

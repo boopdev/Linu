@@ -23,8 +23,6 @@ class welcome:
         self.emote = default.get("emotes.json")
         self.formatter = EmbedHelp()
 
-
-
     async def on_member_join(self, member):
 
         guild = member.guild
@@ -34,34 +32,30 @@ class welcome:
             welcome_message = welcome_config.welcome_message
             channel_dest = int(welcome_config.channel)
             channel = self.bot.get_channel(channel_dest)
-            embed = discord.Embed( 
+            embed = discord.Embed(
                 description=welcome_message,
                 color=0x36393e)
             await channel.send(embed=embed)
 
- 
         else:
             pass
-
-
 
     @commands.group()
     @permissions.has_permissions(manage_server=True)
     async def welcome(self, linu):
         """Welcomer commands"""
         if linu.invoked_subcommand is None:
-            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["welcome"].commands])
+            cmds = "\n".join(
+                [f"{x.name} - {x.help}" for x in self.bot.all_commands["welcome"].commands])
 
             embed = discord.Embed(
                 title="Whoops, seems like you didnt use a sub command",
                 description=f"Hey there! just wanna say we cant do anything more than text (mentions and so on cant be done)\nif you want embeds just use (embed) (welcome) (embed)\nTo use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id} GUILD={linu.guild.name} CHANNEL={linu.channel.name}")
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id} GUILD={linu.guild.name} CHANNEL={linu.channel.name}")
             await linu.send(embed=embed)
-
-
-
 
     @welcome.command(name="create")
     async def start(self, linu):
@@ -72,7 +66,8 @@ class welcome:
         data["guild"] = f"NAME={linu.guild.name} ID={linu.guild.id} OWNER={linu.guild.owner}"
         data["welcome_message"] = "Not specified"
         data["channel"] = f"{linu.channel.id}"
-        data["user"] = "ID: " + str(linu.message.author.id) +  " Username: " + str(linu.message.author.name) + "#" + str(linu.message.author.discriminator) + " <<< Creator"
+        data["user"] = "ID: " + str(linu.message.author.id) + " Username: " + str(
+            linu.message.author.name) + "#" + str(linu.message.author.discriminator) + " <<< Creator"
         json.dump(data, file, ensure_ascii=False)
         file.close()
         embed = discord.Embed(
@@ -80,7 +75,8 @@ class welcome:
             description=f"Welcomer has started! Remember to use an id when editing the channel\nWelcomer has been set to {linu.channel.name} by default",
             color=0xFFA500
         )
-        embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+        embed.set_footer(
+            text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
         await linu.send(embed=embed)
 
     @commands.group()
@@ -88,14 +84,16 @@ class welcome:
     async def editwelcome(self, linu):
         """Edit your welcome stuff"""
         if linu.invoked_subcommand is None:
-            cmds = "\n".join([f"{x.name} - {x.help}" for x in self.bot.all_commands["editwelcome"].commands])
+            cmds = "\n".join(
+                [f"{x.name} - {x.help}" for x in self.bot.all_commands["editwelcome"].commands])
 
             embed = discord.Embed(
                 title="Whoops, seems like you didnt use a sub command",
                 description=f"To use this you gotta do (prefix) (this command) (sub command)\nSub commands:\n{cmds}",
                 color=0xFFA500
             )
-            embed.set_footer(text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
+            embed.set_footer(
+                text=f"USER={linu.message.author.name}#{linu.message.author.discriminator} ID={linu.message.author.id}")
             await linu.send(embed=embed)
 
     @editwelcome.command(name="name")
@@ -112,7 +110,8 @@ class welcome:
             data["guild"] = f"NAME={linu.guild.name} ID={linu.guild.id} OWNER={linu.guild.owner}"
             data["welcome_message"] = " ".join(args).replace("/{}/g", " ")
             data["channel"] = prechannel
-            data["user"] = "ID: " + str(linu.message.author.id) +  " Username: " + str(linu.message.author.name) + "#" + str(linu.message.author.discriminator) + " <<< Creator"
+            data["user"] = "ID: " + str(linu.message.author.id) + " Username: " + str(
+                linu.message.author.name) + "#" + str(linu.message.author.discriminator) + " <<< Creator"
             json.dump(data, file, ensure_ascii=False)
             file.close()
             profilem = discord.Embed(
@@ -122,12 +121,6 @@ class welcome:
             await linu.send(embed=profilem)
         except KeyError:
             await linu.send("There was a error editing the JSON, please contact the owner with your error. Error **'KeyError' Code: 1**")
-
-
-
-
-
-
 
     @editwelcome.command(name="")
     @commands.cooldown(rate=1, per=10.0, type=commands.BucketType.user)
@@ -143,7 +136,8 @@ class welcome:
             data["guild"] = f"NAME={linu.guild.name} ID={linu.guild.id} OWNER={linu.guild.owner}"
             data["welcome_message"] = prewelcome
             data["channel"] = " ".join(args).replace("/{}/g", " ")
-            data["user"] = "ID: " + str(linu.message.author.id) +  " Username: " + str(linu.message.author.name) + "#" + str(linu.message.author.discriminator) + " <<< Creator"
+            data["user"] = "ID: " + str(linu.message.author.id) + " Username: " + str(
+                linu.message.author.name) + "#" + str(linu.message.author.discriminator) + " <<< Creator"
             json.dump(data, file, ensure_ascii=False)
             file.close()
             profilem = discord.Embed(
@@ -154,7 +148,7 @@ class welcome:
         except KeyError:
             await linu.send("There was a error editing the JSON, please contact the owner with your error. Error **'KeyError' Code: 1**")
 
-    #@editwelcome.command(name="")
+    # @editwelcome.command(name="")
    # @commands.cooldown(rate=1, per=10.0, type=commands.BucketType.user)
  #   async def embedtrue(self, linu, *args):
 #        """sets embed to true"""
@@ -172,7 +166,7 @@ class welcome:
          #   data["embed"] = "True"
           #  json.dump(data, file, ensure_ascii=False)
            # file.close()
-            #profilem = discord.Embed(
+            # profilem = discord.Embed(
            #     title=f"embed changed",
          #       description=f"Your embed has been changed to true",
        #         color=0xFFA500)
@@ -205,6 +199,7 @@ class welcome:
   #          await linu.send(embed=profilem)
  #       except KeyError:
 #            await linu.send("There was a error editing the JSON, please contact the owner with your error. Error **'KeyError' Code: 1**")
+
 
 def setup(bot):
     bot.add_cog(welcome(bot))

@@ -25,6 +25,7 @@ from util import repo, default
 from discord import Webhook, AsyncWebhookAdapter
 from collections import Counter
 
+
 class Information2:
     def __init__(self, bot):
         self.bot = bot
@@ -32,14 +33,11 @@ class Information2:
         self.totalmembers = set({})
         self.counter = Counter()
 
-
-
     def gettotalusers(self):
         for x in self.bot.guilds:
             for y in x.members:
                 self.totalmembers.add(y.id)
-        return len(self.totalmembers) 
-
+        return len(self.totalmembers)
 
     def get_bot_uptime(self, *, brief=False):
         now = datetime.utcnow()
@@ -59,9 +57,6 @@ class Information2:
                 fmt = '{d}d ' + fmt
 
         return fmt.format(d=days, h=hours, m=minutes, s=seconds)
-
-
-
 
     @commands.command()
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
