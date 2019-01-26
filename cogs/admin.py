@@ -19,6 +19,7 @@ async def run_cmd(cmd: str) -> str:
     process = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     results = await process.communicate()
     return "".join(x.decode("utf-8") for x in results)
+
 class Admin:
     def __init__(self, bot):
         self.bot = bot
@@ -28,8 +29,8 @@ class Admin:
     @commands.command(hidden=True, aliases=["shell", 'console'])
     @commands.check(repo.is_owner)
     async def terminal(self, ctx, *, alice: str):
-        oof = await run_cmd(f'{alice}')
-        await ctx.send(f"```rb\n{oof}\n```")
+        out = await run_cmd(f'{alice}')
+        await ctx.send(f"```rb\n{out}\n```")
 
 
     @commands.command()
@@ -46,20 +47,31 @@ class Admin:
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
-    async def dm(self, linu, id: int, message: str):
+    async def dm(self, linu, user, message: str):
         """Dm somebody"""
-        user = self.bot.get_user(id)
-        if user is not None:
-            await user.send(message)
-
-    @commands.command(hidden=True)
-    @commands.check(repo.is_owner)
-    async def df(self, linu, user: discord.Member = None, *, message: str):
-        """Dm somebody"""
-        if user is None:
-            user = linu.author
-        else:
-            await user.send(message)
+        _u =  None # This is the actual user instance that we will be messaging
+        
+        if isinstance(user, discord.User): # Checks if the user argument is a discord user
+            _u = user # if so then the user we will be messaging is already provided ezpz
+        
+        if _u is not None: # If user isn't a discord user try and check the id
+            _u = self.bot.get_user(id) #m m m   y e s   i d s
+            
+        if _u is not None:
+            try: 
+                await user.send(message)
+                return await linu.author.send(
+                    f"Alright, I've sent the following to `{_u}`..."
+                    embed=discord.Embed(
+                        description = message, 
+                        colour=0xFFA500,
+                        timestamp=time.time()
+                    ).set_footer(icon_url=_u.avatar_url, text=f"Sent to {_u}")
+                )
+            except: # If the user blocked linu (hmm i wonder why) then it will now notify the command executor
+                return await linu.author.send(
+                    f"The user `{_u}` could not be direct messaged. They might have me blocked!"
+                )
 
     @commands.command(hidden=True)
     @commands.check(repo.is_owner)
@@ -142,7 +154,7 @@ class Admin:
             status=discordStatus)
         await linu.send(f'**:ok:** Changed status to: **{discordStatus}**')
 
-    @commands.command(hidden=True)
+    @commands.command(hidden=True, aliases=['leaveserver'])
     @commands.check(repo.is_owner)
     async def leaves(self, linu, guild: int):
         """leaves a server"""
