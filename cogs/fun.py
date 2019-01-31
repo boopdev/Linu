@@ -8,7 +8,7 @@ import async_timeout
 from io import BytesIO
 from discord.ext import commands
 from util import lists, permissions, http, default
-from random import randint
+from random import randint, choice, uniform # added choice and uniform functions uwu
 
 class Fun_Commands:
     def __init__(self, bot):
@@ -17,6 +17,7 @@ class Fun_Commands:
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def hug(self, linu, user: discord.Member):
+        """Hug somebody. You know you want to!"""
         if user is None:
             await linu.send("You need to @ someone ;-;")
             return
@@ -37,6 +38,7 @@ class Fun_Commands:
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def hit(self, linu, user: discord.Member = None):
+        """Beat somebody up because they called you a poo poo head >:(""" # added description
         if user is None:
             await linu.send("You need to @ someone ;-;")
             return
@@ -49,7 +51,8 @@ class Fun_Commands:
 
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
-    async def boop(self, linu, user: discord.Member = None):
+    async def boop(self, linu, user: discord.Member = None): # boop wuz here owo
+        """Boop somebody special""" # added description
         if user is None:
             await linu.send("You need to @ someone ;-;")
             return
@@ -63,6 +66,7 @@ class Fun_Commands:
     @commands.command(pass_context=True)
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def kiss(self, linu, user: discord.Member = None):
+        """Kiss your homies goodnight""" # added description
         if user is None:
             await linu.send("You need to @ someone ;-;")
             return
@@ -78,35 +82,23 @@ class Fun_Commands:
     @commands.cooldown(rate=1, per=1.5, type=commands.BucketType.user)
     async def rate(self, linu, *, thing: commands.clean_content):
         """ Rates what you desire """
-        n = random.randint(0, 100)
-        d = random.randint(0, 9)
-
-        if n == 100:
-            d = 0
-
-        await linu.send(f"I'd rate {thing} a **{n}.{d} / 100**")
-
-
-
-
+        return await linu.send(f"I'd rate {thing} a **", str(round(random.uniform(0,100),2), "/ 100**") # simplified this command
 
     @commands.command(aliases=['slots', 'bet'])
     @commands.cooldown(rate=1, per=3.0, type=commands.BucketType.user)
     async def slot(self, linu):
         """ Roll the slot machine """
         emojis = "🍎🍊🍐🍋🍉🍇🍓🍒"
-        a = random.choice(emojis)
-        b = random.choice(emojis)
-        c = random.choice(emojis)
+        rolled = [random.choice(emojis) for i in range(3)] # changed three variables to one tuple
 
-        if (a == b == c):
+        if all(c == c[0] for c in rolled): # check tuple and see if all values are alike
             message = 'and won! 🎉'
-        elif (a == b) or (a == c) or (b == c):
+        elif len(set(n)) == 2: # checks to see if there are two items in the set, two would mean there's 2 different emojis in the list
             message = 'and almost won (2/3)'
-        else:
+        else: 
             message = 'and lost...'
 
-        result = f"**{linu.author.name}** rolled the slots...\n**[ {a} {b} {c} ]**\n{message}"
+        result = f"**{linu.author.name}** rolled the slots...\n**[ ", str() f"{a} {b} {c} ]**\n{message}"
         await linu.send(result)
 
 def setup(bot):
