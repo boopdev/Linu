@@ -69,10 +69,10 @@ class Information2:
         """ ping? """
         before = time.monotonic()
         message = await linu.send("pat?")
-        ping = (time.monotonic() - before) * 1000
+        ping = (time.monotonic() - before) * 500
         await message.edit(content=f"""
 The message round-trip took {int(ping)}ms 
-The heartbeat ping {round(self.bot.latency * 1000)}ms 
+The heartbeat ping {round(self.bot.latency * 500)}ms 
 """)
 
     @commands.command(aliases=['stats', 'status'])
