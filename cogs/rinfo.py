@@ -145,7 +145,7 @@ The heartbeat ping {round(self.bot.latency * 500)}ms
             inline=True)
         embed.add_field(
             name="Im using",
-            value="discord.py [rewrite]",
+            value=f"discord.py [rewrite]\n{discord.__version__}", #pp
             inline=True)
         embed.set_footer(
             text='linu')
